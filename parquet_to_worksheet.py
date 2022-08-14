@@ -77,7 +77,7 @@ class ParquetWorksheet:
         ParquetWorksheet.workbook = Workbook()
 
     #read parquet file for data extract - PUBLIC
-    def read_parquet_file(parquet_file, excel_file, parquet_filter):
+    def create_worksheets_parquet(parquet_file, excel_file, parquet_filter):
 
         #call the __create_workbook method to create the workbook
         ParquetWorksheet.create_workbook()
