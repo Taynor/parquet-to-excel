@@ -29,4 +29,4 @@ This current release allows the user to **Dynamically create worksheets from que
 ![image](https://user-images.githubusercontent.com/59668937/184549777-6af2f426-9ac1-4586-b4aa-2f5b9ba559dc.png)
 
 
-![image](https://user-images.githubusercontent.com/59668937/184549810-237e466a-8b43-4f4d-b462-53cd82c728a3.png)
+
