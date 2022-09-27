@@ -3,12 +3,13 @@ import pandas as pd
 
 class ParquetWorksheet:
     #fields of the class
-    def __init__(self, parquet_file, excel_file, worksheets, workbook, parquet_data, parquet_filter, parquet_column):
+    def __init__(self, parquet_file, excel_file, worksheets, workbook, parquet_data, parquet_filter, parquet_column, default_sheet_name):
         
         #these fields are available for the user to manipulate
         self.parquet_file = parquet_file
         self.excel_file = excel_file
         self.parquet_filter = parquet_filter
+        self.default_sheet_name = default_sheet_name
         
         #these fields are hidden and are for PRIVATE use only
         self.worksheets = worksheets = []
@@ -32,7 +33,7 @@ class ParquetWorksheet:
     def excel_file(self, value):
         self.__excel_file = value        
 
-    #property get and set for parquet filter
+    #property get and set for parquet filter value
     @property
     def parquet_filter(self):
         return self.__parquet_filter
@@ -70,20 +71,29 @@ class ParquetWorksheet:
         return self.__parquet_column
     @parquet_column.setter 
     def parquet_column(self, value):
-        self.__parquet_column = value                      
+        self.__parquet_column = value   
+
+    #property get for default sheet name
+    @property
+    def default_sheet_name(self):
+        return self.__defaulf_sheet_name
+    @default_sheet_name.setter
+    def default_sheet_name(self, value):
+        self.__defaulf_sheet_name = value                           
 
     #create the workbook instance - PRIVATE
     def create_workbook():
         ParquetWorksheet.workbook = Workbook()
 
     #read parquet file for data extract - PUBLIC
-    def create_worksheets_parquet(parquet_file, excel_file, parquet_filter):
+    def create_worksheets_parquet(parquet_file, excel_file, parquet_filter, default_sheet_name):
 
         #call the __create_workbook method to create the workbook
         ParquetWorksheet.create_workbook()
         
         #pass the parameters to class varaibles for reuse
         ParquetWorksheet.excel_file = excel_file 
+        ParquetWorksheet.default_sheet_name = default_sheet_name
 
         #read the parquet file to load the data to apply the filter
         parquet_data = pd.read_parquet(parquet_file, engine='fastparquet')
@@ -117,10 +127,12 @@ class ParquetWorksheet:
             worksheets.append(column_filter)
 
         #call the __create_worksheets to create the worksheets built from the worksheets list    
-        ParquetWorksheet.create_worksheets(worksheets)
+        ParquetWorksheet.create_worksheets(ParquetWorksheet.default_sheet_name, worksheets)
 
     #create the worksheets from the parquet filtered column - PRIVATE
-    def create_worksheets(worksheets = []):
+    def create_worksheets(default_sheet_name, worksheets = []):
+
+        ws = ParquetWorksheet.workbook.active.title = default_sheet_name
         
         #loop through the worksheets list and create the worksheets
         for worksheet in worksheets:
