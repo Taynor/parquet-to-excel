@@ -6,13 +6,14 @@ import pathlib
 import glob
 
 class ParquetExcelDataLoad:
-    def __init__(self, parquet_path, parquet_file, excel_file, parquet_list, parquet_subdirectories,
-    worksheets, parquet_file_pattern, parquet_folders):
+    def __init__(self, parquet_path, parquet_load_file, excel_file, parquet_list, parquet_subdirectories,
+    worksheets, parquet_file_pattern, parquet_folders, parquet_filter):
         
         #these fields are available for the user to manipulate
         self.parquet_path = parquet_path
         self.parquet_file = parquet_file
         self.excel_file = excel_file
+        self.parquet_filter = parquet_filter
 
         #these fields are hidden and are for PRIVATE use only
         self.parquet_list = parquet_list
@@ -31,9 +32,9 @@ class ParquetExcelDataLoad:
 
     #property get and set for parquet file value 
     @property
-    def parquet_file(self):
+    def parquet_load_file(self):
         return self.__parquet_file
-    @parquet_file.setter
+    @parquet_load_file.setter
     def parquet_file(self, value):
         self.__parquet_file = value
 
@@ -43,7 +44,73 @@ class ParquetExcelDataLoad:
         return self.__excel_file
     @excel_file.setter
     def excel_file(self, value):
-        self.__excel_file = value             
+        self.__excel_file = value
+
+    #property get and set for parquet filter value
+    @property
+    def parquet_filter(self):
+        return self.__parquet_filter
+    @parquet_filter.setter 
+    def parquet_filter(self, value):
+        self.__parquet_filter = value       
+
+    #property get and set for parquet list value
+    @property
+    def parquet_list(self):
+        return self.__parquet_list
+    @parquet_list.setter 
+    def parquet_list(self, value):
+        self.__parquet_list = value
+
+    #property get and set for parquet subdirectories value
+    @property
+    def parquet_subdirectories(self):
+        return self.__parquet_subdirectories
+    @parquet_subdirectories.setter
+    def parquet_subdirectories(self, value):
+        self.__parquet_subdirectories = value
+
+    #property get and set for worksheets value
+    @property 
+    def worksheets(self):
+        return self.__worksheets
+    @worksheets.setter
+    def worksheets(self, value):
+        self.__worksheets = value
+    
+    #property get and set for parquet file pattern value
+    @property
+    def parquet_file_pattern(self):
+        return self.parquet_file_pattern
+    @parquet_file_pattern.setter 
+    def parquet_file_pattern(self, value):
+        self.parquet_file_pattern = value  
+
+    #property get and set for parquet folder value     
+    @property
+    def parquet_folder(self):
+        return self.__parquet_folder
+    @parquet_folder.setter 
+    def parquet_folder(self, value):
+        self.__parquet_folder = value
+
+    #the main function that takes the arguments that will perform the data load
+    #by taking the pararmeter values and using them as arguments for the downstream functions
+    def load_parquet_data(parquet_load_file, excel_file, parent_path, parquet_filter):
+        pass           
+
+    #read parquet file that acts as a pointer to where the data needs to be loaded into
+    def read_parquet_loader(parquet_load_file):
+        pass
+
+    #sets the filter and loads values of the worksheets that will have its data loaded into
+    def set_filter_parquet(parquet_filter):
+        pass
+
+    #loads the data from the parquet filter and parquet loader file into the respective
+    #worksheets using the arguments from the upstream functions
+    def load_parquet_content(excel_file, parquet_list, worksheets=[]):
+        pass
 
 
             
