@@ -73,7 +73,7 @@ class ParquetWorksheet:
     def parquet_column(self, value):
         self.__parquet_column = value   
 
-    #property get for default sheet name
+    #property get and set for default sheet name
     @property
     def default_sheet_name(self):
         return self.__defaulf_sheet_name
