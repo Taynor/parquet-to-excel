@@ -7,7 +7,7 @@ import glob
 
 class ParquetExcelDataLoad:
     def __init__(self, parquet_path, parquet_load_file, excel_file, parquet_list, parquet_subdirectories,
-    worksheets, parquet_file_pattern, parquet_folders, parquet_filter):
+    worksheets, parquet_file_pattern, parquet_folders, parquet_filter, default_load_sheet, filter_column):
         
         #these fields are available for the user to manipulate
         self.parquet_path = parquet_path
@@ -21,6 +21,8 @@ class ParquetExcelDataLoad:
         self.worksheets = worksheets
         self.parquet_file_pattern = parquet_file_pattern
         self.parquet_folders = parquet_folders
+        self.default_load_sheet
+        self.filter_column
     
     #property get and set for parquet path value
     @property
@@ -94,10 +96,30 @@ class ParquetExcelDataLoad:
     def parquet_folder(self, value):
         self.__parquet_folder = value
 
+    #property get for parquet default load sheet value
+    @property
+    def default_load_sheet(self):
+        return self.__default_load_sheet
+    @default_load_sheet.setter
+    def default_load_sheet(self, value):
+        self.__default_load_sheet = value     
+
+    #property get for filter column value
+    @property
+    def filter_column(self):
+        return self.__filter_column
+    @filter_column.setter
+    def filter_column(self, value):
+        self.__filter_column = value           
+
     #the main function that takes the arguments that will perform the data load
     #by taking the pararmeter values and using them as arguments for the downstream functions
     def load_parquet_data(parquet_load_file, excel_file, parquet_path, parquet_filter, parquet_subdirectories=[], parquet_folders=[], parquet_list=[], parquet_file_pattern = '\\*.parquet'):
         
+        #pass the parameters to class variables for reuse
+        ParquetExcelDataLoad.parquet_load_file = parquet_load_file
+        ParquetExcelDataLoad.parquet_filter = parquet_filter
+
         #create the list of parquet subdirectories
         for files in os.listdir(parquet_path):
             parquet_subdirectories.append(files)     
@@ -114,20 +136,43 @@ class ParquetExcelDataLoad:
 
             #append the list of parquets to the parquet list
             for p in parquets:
-                parquet_list.append(p)               
+                parquet_list.append(p)  
+
+        #read the contents of the parquet loader that has the filter to where the data
+        #should be loaded into the respective worksheets
+        ParquetExcelDataLoad.read_parquet_loader(ParquetExcelDataLoad.parquet_load_file)                      
 
     #read parquet file that acts as a pointer to where the data needs to be loaded into
     def read_parquet_loader(parquet_load_file):
-        pass
+        
+        #read the content of the parquet loading file
+        ParquetExcelDataLoad.default_load_sheet = pd.read_parquet(parquet_load_file, engine='fastparquet')
+
+        #set the filter column read in from the parquet
+        ParquetExcelDataLoad.set_filter_parquet(ParquetExcelDataLoad.parquet_filter, ParquetExcelDataLoad.worksheets)
 
     #sets the filter and loads values of the worksheets that will have its data loaded into
-    def set_filter_parquet(parquet_filter):
-        pass
+    def set_filter_parquet(parquet_filter, worksheets=[]):
+        
+        #apply the filter to the parquet data loader file to build the list of
+        #respective worksheets that will have it's data loaded into
+        #there is a bug that means the filter column cannot be passed in as variable
+        #it needs to be hardcoded in as an attribute of the dataframe
+        ParquetExcelDataLoad.filter_column = ParquetExcelDataLoad.default_load_sheet.Question
+        for fc in ParquetExcelDataLoad.filter_column:
+            pass
 
     #loads the data from the parquet filter and parquet loader file into the respective
     #worksheets using the arguments from the upstream functions
     def load_parquet_content(excel_file, parquet_list, worksheets=[]):
         pass
 
+    #save the workbook with the new worksheets created - PRIVATE
+    #def save_workbook(excel_file):
 
+        load_workbook(excel_file)
+
+        #save the content to the Excel workbook file
+        #excel_writer.save()
+        #excel_writer.close()
             

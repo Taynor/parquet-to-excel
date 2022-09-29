@@ -91,7 +91,7 @@ class ParquetWorksheet:
         #call the __create_workbook method to create the workbook
         ParquetWorksheet.create_workbook()
         
-        #pass the parameters to class varaibles for reuse
+        #pass the parameters to class variables for reuse
         ParquetWorksheet.excel_file = excel_file 
         ParquetWorksheet.default_sheet_name = default_sheet_name
 
