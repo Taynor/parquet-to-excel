@@ -96,8 +96,25 @@ class ParquetExcelDataLoad:
 
     #the main function that takes the arguments that will perform the data load
     #by taking the pararmeter values and using them as arguments for the downstream functions
-    def load_parquet_data(parquet_load_file, excel_file, parent_path, parquet_filter):
-        pass           
+    def load_parquet_data(parquet_load_file, excel_file, parquet_path, parquet_filter, parquet_subdirectories=[], parquet_folders=[], parquet_list=[], parquet_file_pattern = '\\*.parquet'):
+        
+        #create the list of parquet subdirectories
+        for files in os.listdir(parquet_path):
+            parquet_subdirectories.append(files)     
+
+        #create the parquet list
+        for parquet_directory in parquet_subdirectories:
+
+            #the parquet subfolder to a string compare on and add to the list
+            parquet_folder = parquet_path + parquet_directory
+            parquet_folders.append(parquet_folder)
+
+            #search through the sub folder and find the parquets
+            parquets = glob.glob(parquet_folder + parquet_file_pattern)
+
+            #append the list of parquets to the parquet list
+            for p in parquets:
+                parquet_list.append(p)               
 
     #read parquet file that acts as a pointer to where the data needs to be loaded into
     def read_parquet_loader(parquet_load_file):

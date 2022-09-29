@@ -131,7 +131,7 @@ class ParquetWorksheet:
 
     #create the worksheets from the parquet filtered column - PRIVATE
     def create_worksheets(default_sheet_name, worksheets = []):
-
+        #name the default worksheet
         ws = ParquetWorksheet.workbook.active.title = default_sheet_name
         
         #loop through the worksheets list and create the worksheets
