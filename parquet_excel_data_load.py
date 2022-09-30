@@ -7,13 +7,15 @@ import glob
 
 class ParquetExcelDataLoad:
     def __init__(self, parquet_path, parquet_load_file, excel_file, parquet_list, parquet_subdirectories,
-    worksheets, parquet_file_pattern, parquet_folders, parquet_filter, default_load_sheet, filter_column):
+    worksheets, parquet_file_pattern, parquet_folders, parquet_filter, default_load_sheet, filter_column,
+    default_sheet_name):
         
         #these fields are available for the user to manipulate
         self.parquet_path = parquet_path
         self.parquet_file = parquet_file
         self.excel_file = excel_file
         self.parquet_filter = parquet_filter
+        self.default_sheet_name = default_sheet_name
 
         #these fields are hidden and are for PRIVATE use only
         self.parquet_list = parquet_list
@@ -110,7 +112,15 @@ class ParquetExcelDataLoad:
         return self.__filter_column
     @filter_column.setter
     def filter_column(self, value):
-        self.__filter_column = value           
+        self.__filter_column = value 
+
+    #property get and set for the default worksheet value
+    @property
+    def default_sheet_name(self):
+        return self.__default_sheet_name
+    @default_sheet_name.setter
+    def default_sheet_name(self, name):
+        self.__default_sheet_name = value                  
 
     #the main function that takes the arguments that will perform the data load
     #by taking the pararmeter values and using them as arguments for the downstream functions
