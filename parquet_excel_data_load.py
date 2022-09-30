@@ -119,6 +119,7 @@ class ParquetExcelDataLoad:
         #pass the parameters to class variables for reuse
         ParquetExcelDataLoad.parquet_load_file = parquet_load_file
         ParquetExcelDataLoad.parquet_filter = parquet_filter
+        ParquetExcelDataLoad.excel_file = excel_file
 
         #create the list of parquet subdirectories
         for files in os.listdir(parquet_path):
@@ -138,6 +139,9 @@ class ParquetExcelDataLoad:
             for p in parquets:
                 parquet_list.append(p)  
 
+            #reuse the parquet list object to load the data in
+            ParquetExcelDataLoad.parquet_list = parquet_list    
+
         #read the contents of the parquet loader that has the filter to where the data
         #should be loaded into the respective worksheets
         ParquetExcelDataLoad.read_parquet_loader(ParquetExcelDataLoad.parquet_load_file)                      
@@ -149,30 +153,49 @@ class ParquetExcelDataLoad:
         ParquetExcelDataLoad.default_load_sheet = pd.read_parquet(parquet_load_file, engine='fastparquet')
 
         #set the filter column read in from the parquet
-        ParquetExcelDataLoad.set_filter_parquet(ParquetExcelDataLoad.parquet_filter, ParquetExcelDataLoad.worksheets)
+        ParquetExcelDataLoad.set_filter_parquet(ParquetExcelDataLoad.parquet_filter)
 
     #sets the filter and loads values of the worksheets that will have its data loaded into
-    def set_filter_parquet(parquet_filter, worksheets=[]):
+    def set_filter_parquet(parquet_filter):
         
+        #create an empty to append the column values from the parquet filter
+        worksheets = []
+         
         #apply the filter to the parquet data loader file to build the list of
         #respective worksheets that will have it's data loaded into
         #there is a bug that means the filter column cannot be passed in as variable
         #it needs to be hardcoded in as an attribute of the dataframe
         ParquetExcelDataLoad.filter_column = ParquetExcelDataLoad.default_load_sheet.Question
         for fc in ParquetExcelDataLoad.filter_column:
-            pass
+            worksheets.append(fc)
+
+        #pass the parameters to class variables for reuse   
+        ParquetExcelDataLoad.worksheets = worksheets 
+
+        ParquetExcelDataLoad.load_parquet_content(ParquetExcelDataLoad.excel_file, ParquetExcelDataLoad.parquet_list, ParquetExcelDataLoad.worksheets)
 
     #loads the data from the parquet filter and parquet loader file into the respective
     #worksheets using the arguments from the upstream functions
     def load_parquet_content(excel_file, parquet_list, worksheets=[]):
-        pass
-
-    #save the workbook with the new worksheets created - PRIVATE
-    #def save_workbook(excel_file):
-
+        
+        #load the excel file into memory to write the content to the worksheets
+        #that have been added to the worksheets list
         load_workbook(excel_file)
 
+        #set up the excel writer and replace the sheet content in append mode to add the data
+        excel_writer = pd.ExcelWriter(excel_file, mode="a", engine="openpyxl", if_sheet_exists="replace")
+
+        #list the parquet files and match with the worksheet names to load the content 
+        #on the matching parquet leaf sub directory and worksheet name
+        for pl in parquet_list:
+            parent_path = pathlib.PurePath(pl)
+            path_name = parent_path.parent.name
+            for worksheet in worksheets:
+                if path_name == worksheet:
+                    parquet_content = pd.read_parquet(pl, engine='fastparquet')
+                    parquet_content.to_excel(excel_writer, sheet_name=worksheet, header=None, index=False)
+
         #save the content to the Excel workbook file
-        #excel_writer.save()
-        #excel_writer.close()
+        excel_writer.save()
+        excel_writer.close()
             
