@@ -136,6 +136,7 @@ class ParquetExcelDataLoad:
         ParquetExcelDataLoad.parquet_filter = parquet_filter
         ParquetExcelDataLoad.excel_file = excel_file
         ParquetExcelDataLoad.default_sheet_name = default_sheet_name
+        ParquetExcelDataLoad.parquet_load_file = parquet_load_file
 
         #create the list of parquet subdirectories
         for files in os.listdir(parquet_path):
@@ -193,7 +194,7 @@ class ParquetExcelDataLoad:
     #loads the data from the parquet filter and parquet loader file into the respective
     #worksheets using the arguments from the upstream functions
     def load_parquet_content(excel_file, parquet_list, worksheets=[], default_sheet_name = 'Sheet1'):
-        
+
         #load the excel file into memory to write the content to the worksheets
         #that have been added to the worksheets list
         excel_workbook = load_workbook(excel_file)
@@ -205,6 +206,24 @@ class ParquetExcelDataLoad:
             print('not going to load data into default sheet')
         elif default_sheet_name == excel_workbook.active.title:
             print('loading data into default sheet...')
+
+            #load the excel file into memory to write the content to the worksheets
+            #that have been added to the worksheets list
+            excel_workbook = load_workbook(excel_file)
+            
+            #set up the excel writer and replace the sheet content in append mode to add the data
+            excel_writer = pd.ExcelWriter(excel_file, mode="a", engine="openpyxl", if_sheet_exists="replace")
+
+            default_sheet_parquet_load = pd.read_parquet(ParquetExcelDataLoad.parquet_load_file)
+            default_sheet_parquet_load.to_excel(excel_writer, sheet_name=default_sheet_name, index=False)
+
+            #save the content to the Excel workbook file
+            excel_writer.save()
+            excel_writer.close()
+
+        #load the excel file into memory to write the content to the worksheets
+        #that have been added to the worksheets list
+        excel_workbook = load_workbook(excel_file)    
 
         #set up the excel writer and replace the sheet content in append mode to add the data
         excel_writer = pd.ExcelWriter(excel_file, mode="a", engine="openpyxl", if_sheet_exists="replace")
