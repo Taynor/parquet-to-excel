@@ -124,12 +124,13 @@ class ParquetExcelDataLoad:
 
     #the main function that takes the arguments that will perform the data load
     #by taking the pararmeter values and using them as arguments for the downstream functions
-    def load_parquet_data(parquet_load_file, excel_file, parquet_path, parquet_filter, parquet_subdirectories=[], parquet_folders=[], parquet_list=[], parquet_file_pattern = '\\*.parquet'):
+    def load_parquet_data(parquet_load_file, excel_file, parquet_path, parquet_filter, parquet_subdirectories=[], parquet_folders=[], parquet_list=[], parquet_file_pattern = '\\*.parquet', default_sheet_name = 'Sheet1'):
         
         #pass the parameters to class variables for reuse
         ParquetExcelDataLoad.parquet_load_file = parquet_load_file
         ParquetExcelDataLoad.parquet_filter = parquet_filter
         ParquetExcelDataLoad.excel_file = excel_file
+        ParquetExcelDataLoad.default_sheet_name = default_sheet_name
 
         #create the list of parquet subdirectories
         for files in os.listdir(parquet_path):
@@ -182,15 +183,23 @@ class ParquetExcelDataLoad:
         #pass the parameters to class variables for reuse   
         ParquetExcelDataLoad.worksheets = worksheets 
 
-        ParquetExcelDataLoad.load_parquet_content(ParquetExcelDataLoad.excel_file, ParquetExcelDataLoad.parquet_list, ParquetExcelDataLoad.worksheets)
+        ParquetExcelDataLoad.load_parquet_content(ParquetExcelDataLoad.excel_file, ParquetExcelDataLoad.parquet_list, ParquetExcelDataLoad.worksheets, ParquetExcelDataLoad.default_sheet_name)
 
     #loads the data from the parquet filter and parquet loader file into the respective
     #worksheets using the arguments from the upstream functions
-    def load_parquet_content(excel_file, parquet_list, worksheets=[]):
+    def load_parquet_content(excel_file, parquet_list, worksheets=[], default_sheet_name = 'Sheet1'):
         
         #load the excel file into memory to write the content to the worksheets
         #that have been added to the worksheets list
-        load_workbook(excel_file)
+        excel_workbook = load_workbook(excel_file)
+
+        #load content for the default sheet, based upon the default_sheet_name not having the default value
+        #this needs to be loaded first as the default worksheet will be the active sheet once the 
+        #workbook is loaded
+        if default_sheet_name == 'Sheet1':
+            print('not going to load data into default sheet')
+        elif default_sheet_name == excel_workbook.active.title:
+            print('loading data into default sheet...')
 
         #set up the excel writer and replace the sheet content in append mode to add the data
         excel_writer = pd.ExcelWriter(excel_file, mode="a", engine="openpyxl", if_sheet_exists="replace")
@@ -207,5 +216,4 @@ class ParquetExcelDataLoad:
 
         #save the content to the Excel workbook file
         excel_writer.save()
-        excel_writer.close()
-            
+        excel_writer.close()    
