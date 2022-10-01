@@ -124,8 +124,13 @@ class ParquetExcelDataLoad:
 
     #the main function that takes the arguments that will perform the data load
     #by taking the pararmeter values and using them as arguments for the downstream functions
-    def load_parquet_data(parquet_load_file, excel_file, parquet_path, parquet_filter, parquet_subdirectories=[], parquet_folders=[], parquet_list=[], parquet_file_pattern = '\\*.parquet', default_sheet_name = 'Sheet1'):
+    def load_parquet_data(parquet_load_file, excel_file, parquet_path, parquet_filter, default_sheet_name = 'Sheet1', parquet_file_pattern = '\\*.parquet'):
         
+        #local working variables required to build the list of objects
+        parquet_subdirectories=[] 
+        parquet_folders=[]
+        parquet_list=[]
+
         #pass the parameters to class variables for reuse
         ParquetExcelDataLoad.parquet_load_file = parquet_load_file
         ParquetExcelDataLoad.parquet_filter = parquet_filter
