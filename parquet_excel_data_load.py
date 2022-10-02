@@ -4,11 +4,12 @@ import pandas as pd
 import os
 import pathlib
 import glob
+import data_load_config
 
 class ParquetExcelDataLoad:
     def __init__(self, parquet_path, parquet_load_file, excel_file, parquet_list, parquet_subdirectories,
     worksheets, parquet_file_pattern, parquet_folders, parquet_filter, default_load_sheet, filter_column,
-    default_sheet_name):
+    default_sheet_name, custom_data_load):
         
         #these fields are available for the user to manipulate
         self.parquet_path = parquet_path
@@ -16,6 +17,7 @@ class ParquetExcelDataLoad:
         self.excel_file = excel_file
         self.parquet_filter = parquet_filter
         self.default_sheet_name = default_sheet_name
+        self.custom_data_load = custom_data_load
 
         #these fields are hidden and are for PRIVATE use only
         self.parquet_list = parquet_list
@@ -119,12 +121,20 @@ class ParquetExcelDataLoad:
     def default_sheet_name(self):
         return self.__default_sheet_name
     @default_sheet_name.setter
-    def default_sheet_name(self, name):
-        self.__default_sheet_name = value                  
+    def default_sheet_name(self, value):
+        self.__default_sheet_name = value
+
+    #property get and set for the data custom loader value
+    @property
+    def custom_data_load(self):
+        return self.__custom_data_load
+    @custom_data_load.setter
+    def custom_data_load(self, value):
+        self.__custom_data_load = value                         
 
     #the main function that takes the arguments that will perform the data load
     #by taking the pararmeter values and using them as arguments for the downstream functions
-    def load_parquet_data(parquet_load_file, excel_file, parquet_path, parquet_filter, default_sheet_name = 'Sheet1', parquet_file_pattern = '\\*.parquet'):
+    def load_parquet_data(parquet_load_file, excel_file, parquet_path, parquet_filter, default_sheet_name = 'Sheet1', custom_data_load = '', parquet_file_pattern = '\\*.parquet'):
         
         #local working variables required to build the list of objects
         parquet_subdirectories=[] 
@@ -137,6 +147,7 @@ class ParquetExcelDataLoad:
         ParquetExcelDataLoad.excel_file = excel_file
         ParquetExcelDataLoad.default_sheet_name = default_sheet_name
         ParquetExcelDataLoad.parquet_load_file = parquet_load_file
+        ParquetExcelDataLoad.custom_data_load = custom_data_load
 
         #create the list of parquet subdirectories
         for files in os.listdir(parquet_path):
@@ -189,11 +200,11 @@ class ParquetExcelDataLoad:
         #pass the parameters to class variables for reuse   
         ParquetExcelDataLoad.worksheets = worksheets 
 
-        ParquetExcelDataLoad.load_parquet_content(ParquetExcelDataLoad.excel_file, ParquetExcelDataLoad.parquet_list, ParquetExcelDataLoad.worksheets, ParquetExcelDataLoad.default_sheet_name)
+        ParquetExcelDataLoad.load_parquet_content(ParquetExcelDataLoad.excel_file, ParquetExcelDataLoad.parquet_list, ParquetExcelDataLoad.worksheets, ParquetExcelDataLoad.default_sheet_name, ParquetExcelDataLoad.custom_data_load)
 
     #loads the data from the parquet filter and parquet loader file into the respective
     #worksheets using the arguments from the upstream functions
-    def load_parquet_content(excel_file, parquet_list, worksheets=[], default_sheet_name = 'Sheet1'):
+    def load_parquet_content(excel_file, parquet_list, worksheets=[], default_sheet_name = 'Sheet1', custom_data_load = ''):
 
         #load the excel file into memory to write the content to the worksheets
         #that have been added to the worksheets list
@@ -213,9 +224,15 @@ class ParquetExcelDataLoad:
             
             #set up the excel writer and replace the sheet content in append mode to add the data
             excel_writer = pd.ExcelWriter(excel_file, mode="a", engine="openpyxl", if_sheet_exists="replace")
-
             default_sheet_parquet_load = pd.read_parquet(ParquetExcelDataLoad.parquet_load_file)
-            default_sheet_parquet_load.to_excel(excel_writer, sheet_name=default_sheet_name, index=False)
+            
+            #load data at default location in excel
+            if custom_data_load == '':
+                default_sheet_parquet_load.to_excel(excel_writer, sheet_name=default_sheet_name, index=False)
+            
+            #load data at custom position in excel
+            elif custom_data_load != '':
+                default_sheet_parquet_load.to_excel(excel_writer, sheet_name=default_sheet_name, index=False, startcol=data_load_config.cell_location_column[0], startrow=data_load_config.cell_location_row[0])
 
             #save the content to the Excel workbook file
             excel_writer.save()
@@ -236,7 +253,13 @@ class ParquetExcelDataLoad:
             for worksheet in worksheets:
                 if path_name == worksheet:
                     parquet_content = pd.read_parquet(pl, engine='fastparquet')
-                    parquet_content.to_excel(excel_writer, sheet_name=worksheet, header=None, index=False)
+
+                    #load data at default location in excel
+                    if custom_data_load == '':
+                        parquet_content.to_excel(excel_writer, sheet_name=worksheet, header=None, index=False)
+                    #load data at custom position in excel
+                    elif custom_data_load != '':    
+                        parquet_content.to_excel(excel_writer, sheet_name=worksheet, header=None, index=False, startcol=data_load_config.cell_location_column[1], startrow=data_load_config.cell_location_row[1])
 
         #save the content to the Excel workbook file
         excel_writer.save()
