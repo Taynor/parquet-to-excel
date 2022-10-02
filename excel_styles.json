@@ -1,0 +1,74 @@
+{
+    "custom_content_sheet_font": [
+        {
+            "font_name": "Ariel",
+            "font_size": 10,
+            "font_colour": "00000000"
+        }
+    ],
+    "custom_content_bold_title_large": [
+        {
+            "font_name": "Ariel",
+            "font_size": 12,
+            "bold": "True",
+            "font_colour": "00000000"
+        }
+    ],
+    "custom_content_title_large": [
+        {
+            "font_name": "Ariel",
+            "font_size": 12,
+            "font_colour": "00000000"
+        }
+    ],
+    "custom_content_bold_title_small": [
+        {
+            "font_name": "Ariel",
+            "font_size": 10,
+            "bold": "True",
+            "font_colour": "00000000"
+        }
+    ],
+    "custom_alignment_content_bold_title_large": [
+        {
+            "horizontal": "left",
+            "vertical": "bottom"
+        }
+    ],
+    "custom_child_title_small": [
+        {
+            "font_name": "Ariel",
+            "font_size" : 8,
+            "font_colour": "00000000"
+        }
+    ],
+    "custom_child_bold_title_small": [
+        {
+            "font_name": "Ariel",
+            "font_size": 8,
+            "bold": "True",
+            "font_colour": "00000000"
+        }
+    ],
+    "custom_child_values_small": [
+        {
+            "font_name": "Ariel",
+            "font_size" : 7,
+            "font_colour": "00000000"
+        }
+    ],
+    "custom_hyperlink_underline": [
+        {
+            "font_name": "Ariel",
+            "font_size": 10,
+            "underline": "single",
+            "font_colour": "0563C1"
+        }
+    ],
+    "custom_thin_borders": [
+        {
+            "border_width": "thin",
+            "border_colour": "00000000"
+        }
+    ]
+}
