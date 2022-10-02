@@ -3,6 +3,7 @@ from openpyxl import Workbook
 from openpyxl import load_workbook
 from openpyxl.styles import Font, Fill, Border, Side, Alignment
 import pandas as pd
+import excel_config
 
 class ExcelCustomStyler:
     def __init__(self, json_specification, json_styling, excel_file, default_sheet_name, 
@@ -155,11 +156,13 @@ class ExcelCustomStyler:
     
     #takes the arguments to build the worksheets list in order for the styler
     #to style the worksheets in the dynamic list of worksheets
-    def style_worksheets(excel_file, parquet_load_file):
+    def style_worksheets(excel_file, parquet_load_file, json_specification, json_styling):
         
         #pass the parameters to class variables for reuse
         ExcelCustomStyler.excel_file = excel_file
         ExcelCustomStyler.parquet_load_file = parquet_load_file
+        ExcelCustomStyler.json_specification = json_specification
+        ExcelCustomStyler.json_styling = json_styling
 
         #read the contents of the parquet loader that has the filter to where the data
         #should be loaded into the respective worksheets
@@ -191,6 +194,52 @@ class ExcelCustomStyler:
         #pass the parameters to class variables for reuse   
         ExcelCustomStyler.worksheets = worksheets
 
-        print(ExcelCustomStyler.worksheets)
+        #load the excel file with the data loaded to start applying styling
+        ExcelCustomStyler.load_excel_worksheet(ExcelCustomStyler.excel_file, ExcelCustomStyler.json_specification, ExcelCustomStyler.json_styling, ExcelCustomStyler.worksheets)
 
+    #load excel worksheet
+    def load_excel_worksheet(excel_file, json_specification, json_styling, worksheets = []):
+
+        #load the json styling configuration
+        ExcelCustomStyler.read_style_sheet(json_styling)
+        
+        #load the workbook
+        excel_template = load_workbook(excel_file)
+
+        #Add the content sheet default labels and titles
+        for ws in worksheets:
+            if ws == worksheets[0]:
+                worksheet = excel_template[ws[0:]]
+                with open(json_specification) as jsp:
+                    spec_config = json.load(jsp)
+                    #Add the labels and titles
+                    for content_project_details in spec_config["content_project_details"]:
+                        worksheet[excel_config.content_sheet_labels[0]] = content_project_details['Project_Label']
+                        worksheet[excel_config.content_sheet_labels[1]] = content_project_details['Project_Name']
+                        worksheet[excel_config.content_sheet_labels[2]] = content_project_details['Wave_Label']
+                        worksheet[excel_config.content_sheet_labels[3]] = content_project_details['Wave_Name']
+                        worksheet[excel_config.content_sheet_labels[4]] = content_project_details['Fieldwork_Label']
+                        worksheet[excel_config.content_sheet_labels[5]] = content_project_details['Fieldwork_Name']    
+                        worksheet[excel_config.content_sheet_labels[6]] = content_project_details['Child_Sheet_Label']
+                        worksheet[excel_config.content_sheet_labels[7]] = content_project_details['Question_French_Label']
+                        worksheet[excel_config.content_sheet_labels[8]] = content_project_details['Question_English_Label']
+
+                        #Add styling import
+                        #Add styling to the large formatting for the content sheet title labels
+                        worksheet[excel_config.content_sheet_labels[0]].font = content_bold_title_large_font
+                        worksheet[excel_config.content_sheet_labels[2]].font = content_bold_title_large_font
+                        worksheet[excel_config.content_sheet_labels[4]].font = content_bold_title_large_font
+
+                        #Add styling to the large formatting for the content sheet title values
+                        worksheet[excel_config.content_sheet_labels[1]].font = content_title_large_font
+                        worksheet[excel_config.content_sheet_labels[3]].font = content_title_large_font
+                        worksheet[excel_config.content_sheet_labels[5]].font = content_title_large_font
+
+                        #Add styling to the small formatting for the content sheet title values
+                        worksheet[excel_config.content_sheet_labels[6]].font = content_bold_title_small_font
+                        worksheet[excel_config.content_sheet_labels[7]].font = content_bold_title_small_font
+                        worksheet[excel_config.content_sheet_labels[8]].font = content_bold_title_small_font
+        
+        #save custom tyling changes
+        excel_template.save(excel_config.excel_template)                
     
