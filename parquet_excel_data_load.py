@@ -25,8 +25,8 @@ class ParquetExcelDataLoad:
         self.worksheets = worksheets
         self.parquet_file_pattern = parquet_file_pattern
         self.parquet_folders = parquet_folders
-        self.default_load_sheet
-        self.filter_column
+        self.default_load_sheet = default_load_sheet
+        self.filter_column = filter_column
     
     #property get and set for parquet path value
     @property
@@ -206,17 +206,13 @@ class ParquetExcelDataLoad:
     #worksheets using the arguments from the upstream functions
     def load_parquet_content(excel_file, parquet_list, worksheets=[], default_sheet_name = 'Sheet1', custom_data_load = ''):
 
-        #load the excel file into memory to write the content to the worksheets
-        #that have been added to the worksheets list
-        excel_workbook = load_workbook(excel_file)
-
         #load content for the default sheet, based upon the default_sheet_name not having the default value
         #this needs to be loaded first as the default worksheet will be the active sheet once the 
         #workbook is loaded
         if default_sheet_name == 'Sheet1':
-            print('not going to load data into default sheet')
+            #no data will be loaded in the default sheet
+            pass
         elif default_sheet_name == excel_workbook.active.title:
-            print('loading data into default sheet...')
 
             #load the excel file into memory to write the content to the worksheets
             #that have been added to the worksheets list

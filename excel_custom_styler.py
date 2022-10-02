@@ -2,13 +2,22 @@ import json
 from openpyxl import Workbook
 from openpyxl import load_workbook
 from openpyxl.styles import Font, Fill, Border, Side, Alignment
+import pandas as pd
 
 class ExcelCustomStyler:
-    def __init__(self, json_specification, json_styling):
+    def __init__(self, json_specification, json_styling, excel_file, default_sheet_name, 
+    parquet_load_file, default_load_sheet, worksheets):
         
         #these fields are available for the user to manipulate
         self.json_specification = json_specification
         self.json_styling = json_styling
+        self.excel_file = excel_file
+        self.default_sheet_name = default_sheet_name
+        self.parquet_load_file = parquet_load_file
+
+        #these fields are hidden and are for PRIVATE use only
+        self.worksheets = worksheets
+        self.default_load_sheet = default_load_sheet
 
     #property get and set for json specification path value  
     @property
@@ -26,6 +35,46 @@ class ExcelCustomStyler:
     def json_styling(self, value):
         self.__json_sytyling = value
 
+    #property get and set for excel file value  
+    @property
+    def excel_file(self):
+        return self.__excel_file
+    @excel_file.setter
+    def excel_file(self, value):
+        self.__excel_file = value    
+
+    #property get and set for the default worksheet value
+    @property
+    def default_sheet_name(self):
+        return self.__default_sheet_name
+    @default_sheet_name.setter
+    def default_sheet_name(self, value):
+        self.__default_sheet_name = value 
+
+    #property get and set for parquet file value 
+    @property
+    def parquet_load_file(self):
+        return self.__parquet_file
+    @parquet_load_file.setter
+    def parquet_file(self, value):
+        self.__parquet_file = value 
+
+    #property get for parquet default load sheet value
+    @property
+    def default_load_sheet(self):
+        return self.__default_load_sheet
+    @default_load_sheet.setter
+    def default_load_sheet(self, value):
+        self.__default_load_sheet = value
+
+    #property get and set for worksheets value
+    @property 
+    def worksheets(self):
+        return self.__worksheets
+    @worksheets.setter
+    def worksheets(self, value):
+        self.__worksheets = value              
+
     def read_style_sheet(json_styling):
         
         #pass the parameters to class variables for reuse
@@ -34,7 +83,7 @@ class ExcelCustomStyler:
         #load styles from json_styles
         with open(json_styling) as jst:
             style_config = json.load(jst)
-            
+
             #load the styles for large content bold title labels
             for content_bold_title_large in style_config["custom_content_bold_title_large"]:
                 content_bold_title_large_font = Font(name=content_bold_title_large['font_name'],
@@ -103,3 +152,45 @@ class ExcelCustomStyler:
                 thin_borders_top_bottom_style = Border(top=thin_style, bottom=thin_style)
                 thin_borders_top_bottom_right_style = Border(top=thin_style, bottom=thin_style, right=thin_style)
                 thin_borders_top_bottom_left_style = Border(top=thin_style, bottom=thin_style, left=thin_style)
+    
+    #takes the arguments to build the worksheets list in order for the styler
+    #to style the worksheets in the dynamic list of worksheets
+    def style_worksheets(excel_file, parquet_load_file):
+        
+        #pass the parameters to class variables for reuse
+        ExcelCustomStyler.excel_file = excel_file
+        ExcelCustomStyler.parquet_load_file = parquet_load_file
+
+        #read the contents of the parquet loader that has the filter to where the data
+        #should be loaded into the respective worksheets
+        ExcelCustomStyler.read_parquet_loader(ExcelCustomStyler.parquet_load_file)
+
+    #read parquet file that acts as a pointer to where the data needs to be loaded into
+    def read_parquet_loader(parquet_load_file):
+        
+        #read the content of the parquet loading file
+        ExcelCustomStyler.default_load_sheet = pd.read_parquet(parquet_load_file, engine='fastparquet')
+
+        #set the filter column read in from the parquet
+        ExcelCustomStyler.create_worksheet_list()
+    
+    #creates a list of worksheets dynamically created from the parquet filter column
+    def create_worksheet_list():
+        
+        #create an empty to append the column values from the parquet filter
+        worksheets = []
+         
+        #apply the filter to the parquet data loader file to build the list of
+        #respective worksheets that will have it's data loaded into
+        #there is a bug that means the filter column cannot be passed in as variable
+        #it needs to be hardcoded in as an attribute of the dataframe
+        ExcelCustomStyler.filter_column = ExcelCustomStyler.default_load_sheet.Question
+        for fc in ExcelCustomStyler.filter_column:
+            worksheets.append(fc)
+
+        #pass the parameters to class variables for reuse   
+        ExcelCustomStyler.worksheets = worksheets
+
+        print(ExcelCustomStyler.worksheets)
+
+    
