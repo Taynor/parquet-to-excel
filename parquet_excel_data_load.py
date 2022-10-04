@@ -205,6 +205,10 @@ class ParquetExcelDataLoad:
     #loads the data from the parquet filter and parquet loader file into the respective
     #worksheets using the arguments from the upstream functions
     def load_parquet_content(excel_file, parquet_list, worksheets=[], default_sheet_name = 'Sheet1', custom_data_load = ''):
+        
+        #load the excel file into memory to write the content to the worksheets
+        #that have been added to the worksheets list
+        excel_workbook = load_workbook(excel_file)
 
         #load content for the default sheet, based upon the default_sheet_name not having the default value
         #this needs to be loaded first as the default worksheet will be the active sheet once the 
@@ -213,10 +217,6 @@ class ParquetExcelDataLoad:
             #no data will be loaded in the default sheet
             pass
         elif default_sheet_name == excel_workbook.active.title:
-
-            #load the excel file into memory to write the content to the worksheets
-            #that have been added to the worksheets list
-            excel_workbook = load_workbook(excel_file)
             
             #set up the excel writer and replace the sheet content in append mode to add the data
             excel_writer = pd.ExcelWriter(excel_file, mode="a", engine="openpyxl", if_sheet_exists="replace")
