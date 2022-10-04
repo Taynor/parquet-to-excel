@@ -7,7 +7,10 @@ import excel_config
 
 class ExcelCustomStyler:
     def __init__(self, json_specification, json_styling, excel_file, default_sheet_name, 
-    parquet_load_file, default_load_sheet, worksheets):
+    parquet_load_file, default_load_sheet, worksheets, content_bold_title_large_font, 
+    content_title_large_font, content_bold_title_small_font, content_bold_title_large_alignment_style,
+    content_value_medium_font, child_title_small_font, child_bold_title_small_font,
+    child_values_small_font, hyperlink_underline_style):
         
         #these fields are available for the user to manipulate
         self.json_specification = json_specification
@@ -19,6 +22,15 @@ class ExcelCustomStyler:
         #these fields are hidden and are for PRIVATE use only
         self.worksheets = worksheets
         self.default_load_sheet = default_load_sheet
+        self.content_bold_title_large_font = content_bold_title_large_font
+        self.content_title_large_font = content_title_large_font
+        self.content_bold_title_small_font = content_bold_title_small_font
+        self.content_bold_title_large_alignment_style = content_bold_title_large_alignment_style
+        self.content_value_medium_font = content_value_medium_font
+        self.child_title_small_font = child_title_small_font
+        self.child_bold_title_small_font = child_bold_title_small_font
+        self.child_values_small_font = child_values_small_font
+        self.hyperlink_underline_style = hyperlink_underline_style
 
     #property get and set for json specification path value  
     @property
@@ -74,8 +86,81 @@ class ExcelCustomStyler:
         return self.__worksheets
     @worksheets.setter
     def worksheets(self, value):
-        self.__worksheets = value              
+        self.__worksheets = value
 
+    #property get and set for content bold title large font value
+    @property 
+    def content_bold_title_large_font(self):
+        return self.__content_bold_title_large_font
+    @content_bold_title_large_font.setter
+    def content_bold_title_large_font(self, value):
+        self.__content_bold_title_large_font = value
+
+    #property get and set for content title large font value
+    @property 
+    def content_title_large_font(self):
+        return self.__content_title_large_font
+    @content_title_large_font.setter
+    def content_title_large_font(self, value):
+        self.__content_title_large_font = value
+
+    #property get and set for content bold title small font value
+    @property 
+    def content_bold_title_small_font(self):
+        return self.__content_bold_title_small_font
+    @content_bold_title_small_font.setter
+    def content_bold_title_small_font(self, value):
+        self.__content_bold_title_small_font = value 
+
+    #property get and set for content bold title large alignment style value
+    @property 
+    def content_bold_title_large_alignment_style(self):
+        return self.__content_bold_title_large_alignment_style
+    @content_bold_title_large_alignment_style.setter
+    def content_bold_title_large_alignment_style(self, value):
+        self.__content_bold_title_large_alignment_style = value   
+
+    #property get and set for content value medium font value
+    @property 
+    def content_value_medium_font(self):
+        return self.__content_value_medium_font
+    @content_value_medium_font.setter
+    def content_value_medium_font(self, value):
+        self.__content_value_medium_font = value  
+
+    #property get and set for child title small font value
+    @property 
+    def child_title_small_font(self):
+        return self.__child_title_small_font
+    @child_title_small_font.setter
+    def child_title_small_font(self, value):
+        self.__child_title_small_font = value    
+
+    #property get and set for child bold title small font value
+    @property 
+    def child_bold_title_small_font(self):
+        return self.__child_bold_title_small_font
+    @child_bold_title_small_font.setter
+    def child_bold_title_small_font(self, value):
+        self.__child_bold_title_small_font = value 
+
+    #property get and set for child values small font value
+    @property 
+    def child_values_small_font(self):
+        return self.__child_values_small_font
+    @child_values_small_font.setter
+    def child_values_small_font(self, value):
+        self.__child_values_small_font = value
+
+    #property get and set for hyperlink underline style value
+    @property 
+    def hyperlink_underline_style(self):
+        return self.__hyperlink_underline_style
+    @hyperlink_underline_style.setter
+    def hyperlink_underline_style(self, value):
+        self.__hyperlink_underline_style = value                                                 
+
+    #read in the style sheet to load in the global variables for styling
     def read_style_sheet(json_styling):
         
         #pass the parameters to class variables for reuse
@@ -153,10 +238,24 @@ class ExcelCustomStyler:
                 thin_borders_top_bottom_style = Border(top=thin_style, bottom=thin_style)
                 thin_borders_top_bottom_right_style = Border(top=thin_style, bottom=thin_style, right=thin_style)
                 thin_borders_top_bottom_left_style = Border(top=thin_style, bottom=thin_style, left=thin_style)
+            
+            #pass the parameters to class variables for reuse
+            ExcelCustomStyler.content_bold_title_large_font = content_bold_title_large_font
+            ExcelCustomStyler.content_title_large_font = content_title_large_font
+            ExcelCustomStyler.content_bold_title_small_font = content_bold_title_small_font
+            ExcelCustomStyler.content_bold_title_large_alignment_style = content_bold_title_large_alignment_style
+            ExcelCustomStyler.content_value_medium_font = content_value_medium_font
+            ExcelCustomStyler.child_title_small_font = child_title_small_font
+            ExcelCustomStyler.child_bold_title_small_font = child_bold_title_small_font
+            ExcelCustomStyler.child_values_small_font = child_values_small_font
+            ExcelCustomStyler.hyperlink_underline_style = hyperlink_underline_style
     
     #takes the arguments to build the worksheets list in order for the styler
     #to style the worksheets in the dynamic list of worksheets
     def style_worksheets(excel_file, parquet_load_file, json_specification, json_styling):
+
+        #import the styling sheet
+        ExcelCustomStyler.read_style_sheet(json_styling)
         
         #pass the parameters to class variables for reuse
         ExcelCustomStyler.excel_file = excel_file
@@ -202,80 +301,7 @@ class ExcelCustomStyler:
 
         #load the workbook
         excel_template = load_workbook(excel_file)
-
-        #load styles from json_styles
-        with open(ExcelCustomStyler.json_styling) as jst:
-            style_config = json.load(jst)
-
-            #load the styles for large content bold title labels
-            for content_bold_title_large in style_config["custom_content_bold_title_large"]:
-                content_bold_title_large_font = Font(name=content_bold_title_large['font_name'],
-                size=content_bold_title_large['font_size'],
-                bold=content_bold_title_large['bold'],
-                color=content_bold_title_large['font_colour'])
-
-            #load the styles for large content title values
-            for content_title_large in style_config["custom_content_title_large"]:   
-                content_title_large_font = Font(name=content_title_large['font_name'],
-                size=content_title_large['font_size'],
-                color=content_title_large['font_colour'])
-
-            #load the style for small content bold title values
-            for content_bold_title_small in style_config["custom_content_bold_title_small"]:
-                content_bold_title_small_font = Font(name=content_bold_title_small['font_name'],
-                size=content_bold_title_small['font_size'],
-                bold=content_bold_title_large['bold'],
-                color=content_bold_title_small['font_colour'])     
-
-            #load the styles for large content bold title labels alignment
-            for content_bold_title_large_alignment in style_config["custom_alignment_content_bold_title_large"]:
-                content_bold_title_large_alignment_style = Alignment(horizontal=content_bold_title_large_alignment['horizontal'],
-                vertical=content_bold_title_large_alignment['vertical'])   
-
-            #load the styles for medium content values
-            for content_value_medium in style_config["custom_content_sheet_font"]:
-                content_value_medium_font = Font(name=content_value_medium['font_name'],
-                size=content_value_medium['font_size'],
-                color=content_value_medium['font_colour'])   
-
-            #load the styles for the small child title values
-            for child_title_small in style_config["custom_child_title_small"]:
-                child_title_small_font = Font(name=child_title_small['font_name'],
-                size=child_title_small['font_size'],
-                color=child_title_small['font_colour'])    
-
-            #load the styles for the small child bold title values
-            for child_bold_title_small in style_config["custom_child_bold_title_small"]:
-                child_bold_title_small_font = Font(name=child_bold_title_small['font_name'],
-                size=child_bold_title_small['font_size'],
-                bold=child_bold_title_small['bold'],
-                color=child_bold_title_small['font_colour'])   
-
-            #load the styles for the small child values
-            for child_values_small in style_config["custom_child_values_small"]:
-                child_values_small_font = Font(name=child_values_small['font_name'],
-                size=child_values_small['font_size'],
-                color=child_values_small['font_colour'])    
-
-            #load the styles for the child sheet to content sheet hyperlink
-            for hyperlink_underline in style_config["custom_hyperlink_underline"]:
-                hyperlink_underline_style = Font(name=hyperlink_underline['font_name'],
-                size=hyperlink_underline['font_size'],
-                underline=hyperlink_underline['underline'],
-                color=hyperlink_underline['font_colour'])
-            
-            #load the styles for the base sheet borders
-            for thin_borders in style_config["custom_thin_borders"]:             
-                thin_style = Side(border_style=thin_borders['border_width'],
-                color=thin_borders['border_colour'])
-                thin_borders_side_style = Border(right=thin_style, left=thin_style)
-                thin_borders_top_style = Border(top=thin_style, right=thin_style, left=thin_style)
-                thin_borders_bottom_style = Border(bottom=thin_style, right=thin_style, left=thin_style)  
-                thin_borders_full_style = Border(top=thin_style, bottom=thin_style, right=thin_style, left=thin_style)
-                thin_borders_top_bottom_style = Border(top=thin_style, bottom=thin_style)
-                thin_borders_top_bottom_right_style = Border(top=thin_style, bottom=thin_style, right=thin_style)
-                thin_borders_top_bottom_left_style = Border(top=thin_style, bottom=thin_style, left=thin_style)
-
+        
         #Add the content sheet default labels and titles
         for ws in worksheets:
             if ws == worksheets[0]:
@@ -296,20 +322,19 @@ class ExcelCustomStyler:
 
                         #Add styling import
                         #Add styling to the large formatting for the content sheet title labels
-                        worksheet[excel_config.content_sheet_labels[0]].font = content_bold_title_large_font
-                        worksheet[excel_config.content_sheet_labels[2]].font = content_bold_title_large_font
-                        worksheet[excel_config.content_sheet_labels[4]].font = content_bold_title_large_font
+                        worksheet[excel_config.content_sheet_labels[0]].font = ExcelCustomStyler.content_bold_title_large_font
+                        worksheet[excel_config.content_sheet_labels[2]].font = ExcelCustomStyler.content_bold_title_large_font
+                        worksheet[excel_config.content_sheet_labels[4]].font = ExcelCustomStyler.content_bold_title_large_font
 
                         #Add styling to the large formatting for the content sheet title values
-                        worksheet[excel_config.content_sheet_labels[1]].font = content_title_large_font
-                        worksheet[excel_config.content_sheet_labels[3]].font = content_title_large_font
-                        worksheet[excel_config.content_sheet_labels[5]].font = content_title_large_font
+                        worksheet[excel_config.content_sheet_labels[1]].font = ExcelCustomStyler.content_title_large_font
+                        worksheet[excel_config.content_sheet_labels[3]].font = ExcelCustomStyler.content_title_large_font
+                        worksheet[excel_config.content_sheet_labels[5]].font = ExcelCustomStyler.content_title_large_font
 
                         #Add styling to the small formatting for the content sheet title values
-                        worksheet[excel_config.content_sheet_labels[6]].font = content_bold_title_small_font
-                        worksheet[excel_config.content_sheet_labels[7]].font = content_bold_title_small_font
-                        worksheet[excel_config.content_sheet_labels[8]].font = content_bold_title_small_font
-        
-        #save custom tyling changes
-        excel_template.save(excel_config.excel_template)                
+                        worksheet[excel_config.content_sheet_labels[6]].font = ExcelCustomStyler.content_bold_title_small_font
+                        worksheet[excel_config.content_sheet_labels[7]].font = ExcelCustomStyler.content_bold_title_small_font
+                        worksheet[excel_config.content_sheet_labels[8]].font = ExcelCustomStyler.content_bold_title_small_font
     
+        #Add content for child sheets
+        excel_template.save(ExcelCustomStyler.excel_file)  
