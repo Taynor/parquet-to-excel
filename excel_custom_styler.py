@@ -10,7 +10,9 @@ class ExcelCustomStyler:
     parquet_load_file, default_load_sheet, worksheets, content_bold_title_large_font, 
     content_title_large_font, content_bold_title_small_font, content_bold_title_large_alignment_style,
     content_value_medium_font, child_title_small_font, child_bold_title_small_font,
-    child_values_small_font, hyperlink_underline_style):
+    child_values_small_font, hyperlink_underline_style, thin_style, thin_borders_side_style, 
+    thin_borders_top_style, thin_borders_bottom_style, thin_borders_full_style,
+    thin_borders_top_bottom_style, thin_borders_top_bottom_right_style, thin_borders_top_bottom_left_style):
         
         #these fields are available for the user to manipulate
         self.json_specification = json_specification
@@ -31,6 +33,14 @@ class ExcelCustomStyler:
         self.child_bold_title_small_font = child_bold_title_small_font
         self.child_values_small_font = child_values_small_font
         self.hyperlink_underline_style = hyperlink_underline_style
+        self.thin_style = thin_style
+        self.thin_borders_side_style = thin_borders_side_style
+        self.thin_borders_top_style = thin_borders_top_style
+        self.thin_borders_bottom_style = thin_borders_bottom_style
+        self.thin_borders_full_style = thin_borders_full_style
+        self.thin_borders_top_bottom_style = thin_borders_top_bottom_style
+        self.thin_borders_top_bottom_right_style = thin_borders_top_bottom_right_style
+        self.thin_borders_top_bottom_left_style = thin_borders_top_bottom_left_style
 
     #property get and set for json specification path value  
     @property
@@ -158,7 +168,71 @@ class ExcelCustomStyler:
         return self.__hyperlink_underline_style
     @hyperlink_underline_style.setter
     def hyperlink_underline_style(self, value):
-        self.__hyperlink_underline_style = value                                                 
+        self.__hyperlink_underline_style = value
+
+    #property get and set for thin style value
+    @property 
+    def thin_style(self):
+        return self.__thin_style
+    @thin_style.setter
+    def thin_style(self, value):
+        self.__thin_style = value   
+
+    #property get and set for thin borders side style value
+    @property 
+    def thin_borders_side_style(self):
+        return self.__thin_borders_side_style
+    @thin_borders_side_style.setter
+    def thin_borders_side_style(self, value):
+        self.__thin_borders_side_style = value      
+
+    #property get and set for thin borders top style value
+    @property 
+    def thin_borders_top_style(self):
+        return self.__thin_borders_top_style
+    @thin_borders_top_style.setter
+    def thin_borders_top_style(self, value):
+        self.__thin_borders_top_style = value       
+
+    #property get and set for thin borders bottom style value
+    @property 
+    def thin_borders_bottom_style(self):
+        return self.__thin_borders_bottom_style
+    @thin_borders_bottom_style.setter
+    def thin_borders_bottom_style(self, value):
+        self.__thin_borders_bottom_style = value 
+
+    #property get and set for thin borders full style value
+    @property 
+    def thin_borders_full_style(self):
+        return self.__thin_borders_full_style
+    @thin_borders_full_style.setter
+    def thin_borders_full_style(self, value):
+        self.__thin_borders_full_style  
+
+    #property get and set for thin borders top bottom style value
+    @property 
+    def thin_borders_top_bottom_style(self):
+        return self.__thin_borders_top_bottom_style
+    @thin_borders_top_bottom_style.setter
+    def thin_borders_top_bottom_style(self, value):
+        self.__thin_borders_top_bottom_style   
+
+    #property get and set for thin borders top bottom right style value
+    @property 
+    def thin_borders_top_bottom_right_style(self):
+        return self.__thin_borders_top_bottom_right_style
+    @thin_borders_top_bottom_right_style.setter
+    def thin_borders_top_bottom_right_style(self, value):
+        self.__thin_borders_top_bottom_right_style        
+
+    #property get and set for thin borders top bottom left style value
+    @property 
+    def thin_borders_top_bottom_left_style(self):
+        return self.__thin_borders_top_bottom_left_style
+    @thin_borders_top_bottom_left_style.setter
+    def thin_borders_top_bottom_left_style(self, value):
+        self.__thin_borders_top_bottom_left_style                                                       
 
     #read in the style sheet to load in the global variables for styling
     def read_style_sheet(json_styling):
@@ -249,6 +323,14 @@ class ExcelCustomStyler:
             ExcelCustomStyler.child_bold_title_small_font = child_bold_title_small_font
             ExcelCustomStyler.child_values_small_font = child_values_small_font
             ExcelCustomStyler.hyperlink_underline_style = hyperlink_underline_style
+            ExcelCustomStyler.thin_style = thin_style
+            ExcelCustomStyler.thin_borders_side_style = thin_borders_side_style
+            ExcelCustomStyler.thin_borders_top_style = thin_borders_top_style
+            ExcelCustomStyler.thin_borders_bottom_style = thin_borders_bottom_style
+            ExcelCustomStyler.thin_borders_full_style = thin_borders_full_style
+            ExcelCustomStyler.thin_borders_top_bottom_style = thin_borders_top_bottom_style
+            ExcelCustomStyler.thin_borders_top_bottom_right_style = thin_borders_top_bottom_right_style
+            ExcelCustomStyler.thin_borders_top_bottom_left_style = thin_borders_top_bottom_left_style
     
     #takes the arguments to build the worksheets list in order for the styler
     #to style the worksheets in the dynamic list of worksheets
