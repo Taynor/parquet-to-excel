@@ -378,6 +378,8 @@ class ExcelCustomStyler:
         #load the excel file with the data loaded to start applying styling
         ExcelCustomStyler.load_excel_worksheet(ExcelCustomStyler.excel_file, ExcelCustomStyler.json_specification, ExcelCustomStyler.worksheets)
 
+    #creates the list parquets from the parquet folder path     
+
     #load excel worksheet
     def load_excel_worksheet(excel_file, json_specification, worksheets = []):
 

@@ -181,19 +181,18 @@ class ParquetExcelDataLoad:
         ParquetExcelDataLoad.default_load_sheet = pd.read_parquet(parquet_load_file, engine='fastparquet')
 
         #set the filter column read in from the parquet
-        ParquetExcelDataLoad.set_filter_parquet(ParquetExcelDataLoad.parquet_filter)
+        ParquetExcelDataLoad.set_filter_parquet(ParquetExcelDataLoad.parquet_filter, ParquetExcelDataLoad.default_load_sheet)
 
     #sets the filter and loads values of the worksheets that will have its data loaded into
-    def set_filter_parquet(parquet_filter):
+    def set_filter_parquet(parquet_filter, parquet_data):
         
         #create an empty to append the column values from the parquet filter
         worksheets = []
          
-        #apply the filter to the parquet data loader file to build the list of
-        #respective worksheets that will have it's data loaded into
-        #there is a bug that means the filter column cannot be passed in as variable
-        #it needs to be hardcoded in as an attribute of the dataframe
-        ParquetExcelDataLoad.filter_column = ParquetExcelDataLoad.default_load_sheet.Question
+        #filter the parquet on the parquet_data and parquet_filter values
+        ParquetExcelDataLoad.filter_column = parquet_data[parquet_filter]
+        
+        #add the dynamic items found in the parquet data filter column to the worksheets list 
         for fc in ParquetExcelDataLoad.filter_column:
             worksheets.append(fc)
 
@@ -214,8 +213,10 @@ class ParquetExcelDataLoad:
         #this needs to be loaded first as the default worksheet will be the active sheet once the 
         #workbook is loaded
         if default_sheet_name == 'Sheet1':
+
             #no data will be loaded in the default sheet
             pass
+        
         elif default_sheet_name == excel_workbook.active.title:
             
             #set up the excel writer and replace the sheet content in append mode to add the data
