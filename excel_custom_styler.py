@@ -425,8 +425,32 @@ class ExcelCustomStyler:
                 print('the base sheet')
                 #perform base_sheet styling
             elif ws != 'Content' and ws != 'B':
-                print('child sheet')
-                #perform child_sheet styling  
+                worksheet = excel_workbook[ws[0:]]
+                for child_project_details in spec_config['child_project_details']:
+                    #add child sheet content
+                    worksheet[excel_config.child_sheet_labels[0]] = child_project_details['Project_Name']
+                    worksheet[excel_config.child_sheet_labels[1]] = child_project_details['Wave_Name']
+                    worksheet[excel_config.child_sheet_labels[2]] = child_project_details['Fieldwork_Name']
+                    worksheet[excel_config.child_sheet_labels[3]] = child_project_details['Total']
+                    worksheet[excel_config.child_sheet_labels[19]] = child_project_details['Hyperlink_Value']
+
+                    #set up the hyperlink for back to content sheet
+                    worksheet[excel_config.child_sheet_labels[19]].font = ExcelCustomStyler.hyperlink_underline_style
+                    worksheet[excel_config.child_sheet_labels[19]].hyperlink = child_project_details['Content_Sheet_Hyperlink'] 
+
+                    #format the layout
+                    worksheet.merge_cells(excel_config.child_sheet_labels[4])    
+                    worksheet.freeze_panes = excel_config.child_sheet_labels[5]   
+
+                    #add styling to child sheet labels
+                    worksheet[excel_config.child_sheet_labels[0]].font = ExcelCustomStyler.child_title_small_font
+                    worksheet[excel_config.child_sheet_labels[1]].font = ExcelCustomStyler.child_title_small_font
+                    worksheet[excel_config.child_sheet_labels[2]].font = ExcelCustomStyler.child_title_small_font
+                    worksheet[excel_config.child_sheet_labels[3]].font = ExcelCustomStyler.child_bold_title_small_font
+
+                    #add styling to the child sheet question labels
+                    worksheet[excel_config.child_sheet_question_labels[0]].font = ExcelCustomStyler.child_title_small_font
+                    worksheet[excel_config.child_sheet_question_labels[1]].font = ExcelCustomStyler.child_title_small_font  
                 
         #Add content for child sheets
         excel_workbook.save(ExcelCustomStyler.excel_file)  
