@@ -5,6 +5,7 @@ from openpyxl import load_workbook
 from openpyxl.styles import Font, Fill, Border, Side, Alignment
 import pandas as pd
 import excel_config
+from copy import copy
 
 class ExcelCustomStyler:
     def __init__(self, json_specification, json_styling, excel_file, default_sheet_name, 
@@ -414,29 +415,61 @@ class ExcelCustomStyler:
                 #Add styling to the small formatting for the content sheet title values
                 worksheet[excel_config.content_sheet_labels[6]].font = ExcelCustomStyler.content_bold_title_small_font
                 worksheet[excel_config.content_sheet_labels[7]].font = ExcelCustomStyler.content_bold_title_small_font
-                worksheet[excel_config.content_sheet_labels[8]].font = ExcelCustomStyler.content_bold_title_small_font
-        
-        #iterate through the content columns and apply the font styling to these rows
-        #where there are no blank values or nulls
-        for row in worksheet.iter_rows(min_col=1, min_row=6, max_col=3):
+                worksheet[excel_config.content_sheet_labels[8]].font = ExcelCustomStyler.content_bold_title_small_font                             
+
+        #loop and grab values to copy into the child sheets for the French questions
+        for row in worksheet.iter_rows(min_col=2, min_row=6, max_col=2):
+            for ws in worksheets:
+                for cell in row:
+                    if cell.value != '' or cell.value != None:
+                        #print(cell.value)
+                        #pass
+                        old_cell_content = cell.value
+                        new_cell_content = old_cell_content.split(".", 1)
+                        substring = new_cell_content[0]
+                        print(substring)
+            
+                        #worksheet.cell(row=3, column=2).value = cell.value
+
+        #loop and grab values to copy into the child sheets for the English questions
+        '''for row in worksheet.iter_rows(min_col=3, min_row=6, max_col=3):
             for cell in row:
                 if cell.value != '' or cell.value != None:
-                    cell.font = ExcelCustomStyler.content_value_medium_font
+                    for ws in worksheets:
+                        if ws != 'Content':
+                            worksheet = excel_workbook[ws[0:]]
+                            worksheet.cell(row=3, column=8).value = cell.value'''                                       
+
+        #iterate through the content columns and apply the font styling to these rows
+        #where there are no blank values or nulls
+        for row in worksheet.iter_rows(min_col=1, min_row=6, max_col=1):
+
+            #build the hyperlink locations for the child cells 
+            for ws in worksheets:
+                hyperlink_location = "#"+ws+"!A1"
+                for cell in row:
+
+                    #apply the hyperlink and styling if the cell value and hyperlink
+                    #location matches
+                    if cell.value != '' or cell.value != None:
+                        cell.font = ExcelCustomStyler.hyperlink_underline_style
+                        if cell.value == ws:                       
+                            cell.hyperlink = hyperlink_location     
+        
+        #format the rest of the values in the content worksheet
+        for row in worksheet.iter_rows(min_col=2, min_row=6, max_col=3):
+            for cell in row:
+                if cell.value != '' or cell.value != None:
+                    cell.font = ExcelCustomStyler.content_value_medium_font            
 
         #apply styling for the other worksheets
         for ws in worksheets:
 
-            #apply the styling to the base worksheet
-            if ws == 'B':
-
-                #perform base_sheet styling
-                #print('the base sheet')
-                pass
-
-            #apply the styling to the other child worksheets    
-            elif ws != 'Content' and ws != 'B':
+            #apply the default styling to the other child worksheets including the base sheet   
+            if ws != 'Content':
                 worksheet = excel_workbook[ws[0:]]
                 for child_project_details in spec_config['child_project_details']:
+
                     #add child sheet content
                     worksheet[excel_config.child_sheet_labels[0]] = child_project_details['Project_Name']
                     worksheet[excel_config.child_sheet_labels[1]] = child_project_details['Wave_Name']
@@ -461,6 +494,120 @@ class ExcelCustomStyler:
                     #add styling to the child sheet question labels
                     worksheet[excel_config.child_sheet_question_labels[0]].font = ExcelCustomStyler.child_title_small_font
                     worksheet[excel_config.child_sheet_question_labels[1]].font = ExcelCustomStyler.child_title_small_font  
+
+            #apply the styling to the child worksheets 
+            if ws != 'B' and ws != 'Content':
+
+                #perform child_sheet styling
+                #this styling is for the content for the child sheets values
+                for row in worksheet.iter_rows(min_col=3, min_row=11, max_col=15):
+                    for cell in row:
+                        if cell.value != '' or cell.value != None:
+                            cell.font = ExcelCustomStyler.child_values_small_font       
+
+            #apply the default content to the base worksheet
+            if ws == 'B':               
+                worksheet = excel_workbook[ws[0:]]
+                for base_respondents_labels in spec_config['base_respondents_labels']:
+                    worksheet[excel_config.base_sheet_labels[0]] = base_respondents_labels['Country_AL']
+                    worksheet[excel_config.base_sheet_labels[1]] = base_respondents_labels['Country_AL']
+                    worksheet[excel_config.base_sheet_labels[2]] = base_respondents_labels['Country_AT']
+                    worksheet[excel_config.base_sheet_labels[3]] = base_respondents_labels['Country_AT']
+                    worksheet[excel_config.base_sheet_labels[4]] = base_respondents_labels['Country_BE']
+                    worksheet[excel_config.base_sheet_labels[5]] = base_respondents_labels['Country_BE']
+                    worksheet[excel_config.base_sheet_labels[6]] = base_respondents_labels['Country_BG']
+                    worksheet[excel_config.base_sheet_labels[7]] = base_respondents_labels['Country_BG'] 
+                    worksheet[excel_config.base_sheet_labels[8]] = base_respondents_labels['Country_BA']
+                    worksheet[excel_config.base_sheet_labels[9]] = base_respondents_labels['Country_BA']
+                    worksheet[excel_config.base_sheet_labels[10]] = base_respondents_labels['Country_CH']
+                    worksheet[excel_config.base_sheet_labels[11]] = base_respondents_labels['Country_CH']  
+                    worksheet[excel_config.base_sheet_labels[12]] = base_respondents_labels['Country_CY']
+                    worksheet[excel_config.base_sheet_labels[13]] = base_respondents_labels['Country_CY']
+                    worksheet[excel_config.base_sheet_labels[14]] = base_respondents_labels['Country_CY(TCC)']
+                    worksheet[excel_config.base_sheet_labels[15]] = base_respondents_labels['Country_CY(TCC)']
+                    worksheet[excel_config.base_sheet_labels[16]] = base_respondents_labels['Country_CZ']
+                    worksheet[excel_config.base_sheet_labels[17]] = base_respondents_labels['Country_CZ']
+                    worksheet[excel_config.base_sheet_labels[18]] = base_respondents_labels['Country_DE']
+                    worksheet[excel_config.base_sheet_labels[19]] = base_respondents_labels['Country_DE']
+                    worksheet[excel_config.base_sheet_labels[20]] = base_respondents_labels['Country_DK']
+                    worksheet[excel_config.base_sheet_labels[21]] = base_respondents_labels['Country_DK']
+                    worksheet[excel_config.base_sheet_labels[22]] = base_respondents_labels['Country_EE']
+                    worksheet[excel_config.base_sheet_labels[23]] = base_respondents_labels['Country_EE']
+                    worksheet[excel_config.base_sheet_labels[24]] = base_respondents_labels['Country_EL(GR)']
+                    worksheet[excel_config.base_sheet_labels[25]] = base_respondents_labels['Country_EL(GR)']
+                    worksheet[excel_config.base_sheet_labels[26]] = base_respondents_labels['Country_ES']
+                    worksheet[excel_config.base_sheet_labels[27]] = base_respondents_labels['Country_ES']
+                    worksheet[excel_config.base_sheet_labels[28]] = base_respondents_labels['Country_FI']
+                    worksheet[excel_config.base_sheet_labels[29]] = base_respondents_labels['Country_FI']
+                    worksheet[excel_config.base_sheet_labels[30]] = base_respondents_labels['Country_FR']
+                    worksheet[excel_config.base_sheet_labels[31]] = base_respondents_labels['Country_FR']
+                    worksheet[excel_config.base_sheet_labels[32]] = base_respondents_labels['Country_HR']
+                    worksheet[excel_config.base_sheet_labels[33]] = base_respondents_labels['Country_HR']
+                    worksheet[excel_config.base_sheet_labels[34]] = base_respondents_labels['Country_HU']
+                    worksheet[excel_config.base_sheet_labels[35]] = base_respondents_labels['Country_HU']
+                    worksheet[excel_config.base_sheet_labels[36]] = base_respondents_labels['Country_IE']
+                    worksheet[excel_config.base_sheet_labels[37]] = base_respondents_labels['Country_IE']
+                    worksheet[excel_config.base_sheet_labels[38]] = base_respondents_labels['Country_IS']
+                    worksheet[excel_config.base_sheet_labels[39]] = base_respondents_labels['Country_IS']
+                    worksheet[excel_config.base_sheet_labels[40]] = base_respondents_labels['Country_IT']
+                    worksheet[excel_config.base_sheet_labels[41]] = base_respondents_labels['Country_IT']
+                    worksheet[excel_config.base_sheet_labels[42]] = base_respondents_labels['Country_KV']
+                    worksheet[excel_config.base_sheet_labels[43]] = base_respondents_labels['Country_KV']
+                    worksheet[excel_config.base_sheet_labels[44]] = base_respondents_labels['Country_LT']
+                    worksheet[excel_config.base_sheet_labels[45]] = base_respondents_labels['Country_LT']
+                    worksheet[excel_config.base_sheet_labels[46]] = base_respondents_labels['Country_LU']
+                    worksheet[excel_config.base_sheet_labels[47]] = base_respondents_labels['Country_LU']
+                    worksheet[excel_config.base_sheet_labels[48]] = base_respondents_labels['Country_LV']
+                    worksheet[excel_config.base_sheet_labels[49]] = base_respondents_labels['Country_LV']
+                    worksheet[excel_config.base_sheet_labels[50]] = base_respondents_labels['Country_ME']
+                    worksheet[excel_config.base_sheet_labels[51]] = base_respondents_labels['Country_ME']
+                    worksheet[excel_config.base_sheet_labels[52]] = base_respondents_labels['Country_MK']
+                    worksheet[excel_config.base_sheet_labels[53]] = base_respondents_labels['Country_MK']
+                    worksheet[excel_config.base_sheet_labels[54]] = base_respondents_labels['Country_MT']
+                    worksheet[excel_config.base_sheet_labels[55]] = base_respondents_labels['Country_MT']
+                    worksheet[excel_config.base_sheet_labels[56]] = base_respondents_labels['Country_NL']
+                    worksheet[excel_config.base_sheet_labels[57]] = base_respondents_labels['Country_NL']
+                    worksheet[excel_config.base_sheet_labels[58]] = base_respondents_labels['Country_NO']
+                    worksheet[excel_config.base_sheet_labels[59]] = base_respondents_labels['Country_NO']
+                    worksheet[excel_config.base_sheet_labels[60]] = base_respondents_labels['Country_PL']
+                    worksheet[excel_config.base_sheet_labels[61]] = base_respondents_labels['Country_PL']
+                    worksheet[excel_config.base_sheet_labels[62]] = base_respondents_labels['Country_PT']
+                    worksheet[excel_config.base_sheet_labels[63]] = base_respondents_labels['Country_PT']
+                    worksheet[excel_config.base_sheet_labels[64]] = base_respondents_labels['Country_RO']
+                    worksheet[excel_config.base_sheet_labels[65]] = base_respondents_labels['Country_RO']
+                    worksheet[excel_config.base_sheet_labels[66]] = base_respondents_labels['Country_RS']
+                    worksheet[excel_config.base_sheet_labels[67]] = base_respondents_labels['Country_RS']
+                    worksheet[excel_config.base_sheet_labels[68]] = base_respondents_labels['Country_SE']
+                    worksheet[excel_config.base_sheet_labels[69]] = base_respondents_labels['Country_SE']
+                    worksheet[excel_config.base_sheet_labels[70]] = base_respondents_labels['Country_SI']
+                    worksheet[excel_config.base_sheet_labels[71]] = base_respondents_labels['Country_SI']
+                    worksheet[excel_config.base_sheet_labels[72]] = base_respondents_labels['Country_SK']
+                    worksheet[excel_config.base_sheet_labels[73]] = base_respondents_labels['Country_SK']
+                    worksheet[excel_config.base_sheet_labels[74]] = base_respondents_labels['Country_TR']
+                    worksheet[excel_config.base_sheet_labels[75]] = base_respondents_labels['Country_TR']
+                    worksheet[excel_config.base_sheet_labels[76]] = base_respondents_labels['Country_UK']
+                    worksheet[excel_config.base_sheet_labels[77]] = base_respondents_labels['Country_UK']
+                    worksheet[excel_config.base_sheet_labels[78]] = base_respondents_labels['Country_US']
+                    worksheet[excel_config.base_sheet_labels[79]] = base_respondents_labels['Country_US']
+                    worksheet[excel_config.base_sheet_labels[80]] = base_respondents_labels['Country_WG']
+                    worksheet[excel_config.base_sheet_labels[81]] = base_respondents_labels['Country_WG']
+                    worksheet[excel_config.base_sheet_labels[82]] = base_respondents_labels['Country_EG']
+                    worksheet[excel_config.base_sheet_labels[83]] = base_respondents_labels['Country_EG']
+                
+                #perform base_sheet styling
+                #iterate through the content columns and apply the font styling to these rows
+                #where there are no blank values or nulls
+                #this styling is for the list of countries
+                for row in worksheet.iter_rows(min_col=2, min_row=12, max_col=2):
+                    for cell in row:
+                        if cell.value != '' or cell.value != None:
+                            cell.font = ExcelCustomStyler.child_title_small_font
+
+                #this styling is for the content for the base sheet values
+                for row in worksheet.iter_rows(min_col=3, min_row=11, max_col=15):
+                    for cell in row:
+                        if cell.value != '' or cell.value != None:
+                            cell.font = ExcelCustomStyler.child_values_small_font                      
                 
         #Add content for child sheets
         excel_workbook.save(ExcelCustomStyler.excel_file)  
