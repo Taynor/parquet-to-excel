@@ -1,4 +1,5 @@
 import json
+import openpyxl
 from openpyxl import Workbook
 from openpyxl import load_workbook
 from openpyxl.styles import Font, Fill, Border, Side, Alignment
@@ -379,11 +380,7 @@ class ExcelCustomStyler:
         #ExcelCustomStyler.load_excel_worksheet(ExcelCustomStyler.excel_file, ExcelCustomStyler.json_specification, ExcelCustomStyler.worksheets)
         ExcelCustomStyler.apply_worksheet_style(ExcelCustomStyler.worksheets, ExcelCustomStyler.excel_file, ExcelCustomStyler.default_sheet_name, ExcelCustomStyler.json_specification)
 
-    #creates the list parquets from the parquet folder path 
-    # review and resuse the following logic
-    #def load_parquet_data() to create the parquet_list
-    #def load_parquet_content() to load the content from the parquet or JSON spec
-    #with styling
+    #apply the styling 
     def apply_worksheet_style(worksheets, excel_file, default_sheet_name, json_specification):
 
         #load the workbook
@@ -418,12 +415,25 @@ class ExcelCustomStyler:
                 worksheet[excel_config.content_sheet_labels[6]].font = ExcelCustomStyler.content_bold_title_small_font
                 worksheet[excel_config.content_sheet_labels[7]].font = ExcelCustomStyler.content_bold_title_small_font
                 worksheet[excel_config.content_sheet_labels[8]].font = ExcelCustomStyler.content_bold_title_small_font
+        
+        #iterate through the content columns and apply the font styling to these rows
+        #where there are no blank values or nulls
+        for row in worksheet.iter_rows(min_col=1, min_row=6, max_col=3):
+            for cell in row:
+                if cell.value != '' or cell.value != None:
+                    cell.font = ExcelCustomStyler.content_value_medium_font
 
         #apply styling for the other worksheets
         for ws in worksheets:
+
+            #apply the styling to the base worksheet
             if ws == 'B':
-                print('the base sheet')
+
                 #perform base_sheet styling
+                #print('the base sheet')
+                pass
+
+            #apply the styling to the other child worksheets    
             elif ws != 'Content' and ws != 'B':
                 worksheet = excel_workbook[ws[0:]]
                 for child_project_details in spec_config['child_project_details']:
