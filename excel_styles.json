@@ -38,7 +38,7 @@
     "custom_child_title_small": [
         {
             "font_name": "Ariel",
-            "font_size" : 8,
+            "font_size": 8,
             "font_colour": "00000000"
         }
     ],
@@ -53,7 +53,15 @@
     "custom_child_values_small": [
         {
             "font_name": "Ariel",
-            "font_size" : 7,
+            "font_size": 7,
+            "font_colour": "00000000"
+        }
+    ],
+    "custom_child_bold_values_small": [
+        {
+            "font_name": "Ariel",
+            "font_size": 7,
+            "bold": "True",
             "font_colour": "00000000"
         }
     ],

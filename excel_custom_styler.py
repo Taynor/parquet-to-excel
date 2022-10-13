@@ -294,7 +294,14 @@ class ExcelCustomStyler:
             for child_values_small in style_config["custom_child_values_small"]:
                 child_values_small_font = Font(name=child_values_small['font_name'],
                 size=child_values_small['font_size'],
-                color=child_values_small['font_colour'])    
+                color=child_values_small['font_colour'])
+
+            #load the styles for the small bold child values
+            for child_bold_values_small in style_config["custom_child_bold_values_small"]:
+                child_bold_values_small_font = Font(name=child_bold_values_small['font_name'],
+                size=child_bold_values_small['font_size'],
+                bold=child_bold_values_small['bold'],
+                color=child_bold_values_small['font_colour'])    
 
             #load the styles for the child sheet to content sheet hyperlink
             for hyperlink_underline in style_config["custom_hyperlink_underline"]:
@@ -324,6 +331,7 @@ class ExcelCustomStyler:
             ExcelCustomStyler.child_title_small_font = child_title_small_font
             ExcelCustomStyler.child_bold_title_small_font = child_bold_title_small_font
             ExcelCustomStyler.child_values_small_font = child_values_small_font
+            ExcelCustomStyler.child_bold_values_small_font = child_bold_values_small_font
             ExcelCustomStyler.hyperlink_underline_style = hyperlink_underline_style
             ExcelCustomStyler.thin_style = thin_style
             ExcelCustomStyler.thin_borders_side_style = thin_borders_side_style
@@ -416,29 +424,60 @@ class ExcelCustomStyler:
                 worksheet[excel_config.content_sheet_labels[6]].font = ExcelCustomStyler.content_bold_title_small_font
                 worksheet[excel_config.content_sheet_labels[7]].font = ExcelCustomStyler.content_bold_title_small_font
                 worksheet[excel_config.content_sheet_labels[8]].font = ExcelCustomStyler.content_bold_title_small_font                             
+        
+        #Add content for child sheets
+        excel_workbook.save(ExcelCustomStyler.excel_file)
 
-        #loop and grab values to copy into the child sheets for the French questions
+        #load the workbook
+        excel_workbook = load_workbook(excel_file)
+        worksheet = excel_workbook.active
+        
+        #create two lists designed to be used as the comparison statement
+        #for loading the worksheet questions in for their respective worksheets
+        cells_list = []
+        cells_questions_list = []
         for row in worksheet.iter_rows(min_col=2, min_row=6, max_col=2):
-            for ws in worksheets:
-                for cell in row:
-                    if cell.value != '' or cell.value != None:
-                        #print(cell.value)
-                        #pass
-                        old_cell_content = cell.value
-                        new_cell_content = old_cell_content.split(".", 1)
-                        substring = new_cell_content[0]
-                        print(substring)
-            
-                        #worksheet.cell(row=3, column=2).value = cell.value
-
-        #loop and grab values to copy into the child sheets for the English questions
-        '''for row in worksheet.iter_rows(min_col=3, min_row=6, max_col=3):
             for cell in row:
                 if cell.value != '' or cell.value != None:
-                    for ws in worksheets:
-                        if ws != 'Content':
-                            worksheet = excel_workbook[ws[0:]]
-                            worksheet.cell(row=3, column=8).value = cell.value'''                                       
+                    current_cell_string = cell.value
+                    new_cell_string = current_cell_string.split(".", 1)
+                    substring_cell_string = new_cell_string[0]   
+                    cells_list.append(substring_cell_string)
+                    cells_questions_list.append(current_cell_string)
+        
+        #loop and grab values to copy into the child sheets for the French questions
+        for row in worksheet.iter_rows(min_col=2, min_row=6, max_col=2):
+            for cell in row:
+                if cell.value != '' or cell.value != None:
+                    for cl in cells_list:
+                        for ws in worksheets:
+                            if cl == ws and ws != 'Content':
+                                worksheet = excel_workbook[ws[0:]]
+                                worksheet.cell(row=3, column=2).value = cell.value
+
+        #Add content for child sheets
+        excel_workbook.save(ExcelCustomStyler.excel_file)   
+
+        #load the workbook
+        excel_workbook = load_workbook(excel_file)
+        worksheet = excel_workbook.active                     
+        
+        #loop and grab values to copy into the child sheets for the English questions
+        for row in worksheet.iter_rows(min_col=3, min_row=6, max_col=3):
+            for cell in row:
+                if cell.value != '' or cell.value != None:
+                    for cl in cells_list:
+                        for ws in worksheets:
+                            if cl == ws and ws != 'Content':
+                                worksheet = excel_workbook[ws[0:]]
+                                worksheet.cell(row=3, column=8).value = cell.value                        
+  
+        #Add content for child sheets
+        excel_workbook.save(ExcelCustomStyler.excel_file)  
+
+        #load the workbook
+        excel_workbook = load_workbook(excel_file)
+        worksheet = excel_workbook.active                                                         
 
         #iterate through the content columns and apply the font styling to these rows
         #where there are no blank values or nulls
@@ -460,7 +499,14 @@ class ExcelCustomStyler:
         for row in worksheet.iter_rows(min_col=2, min_row=6, max_col=3):
             for cell in row:
                 if cell.value != '' or cell.value != None:
-                    cell.font = ExcelCustomStyler.content_value_medium_font            
+                    cell.font = ExcelCustomStyler.content_value_medium_font 
+
+        #Add content for child sheets
+        excel_workbook.save(ExcelCustomStyler.excel_file)   
+
+        #load the workbook
+        excel_workbook = load_workbook(excel_file)
+        worksheet = excel_workbook.active                     
 
         #apply styling for the other worksheets
         for ws in worksheets:
@@ -494,6 +540,18 @@ class ExcelCustomStyler:
                     #add styling to the child sheet question labels
                     worksheet[excel_config.child_sheet_question_labels[0]].font = ExcelCustomStyler.child_title_small_font
                     worksheet[excel_config.child_sheet_question_labels[1]].font = ExcelCustomStyler.child_title_small_font  
+
+                #add styling to the totals column values
+                for row in worksheet.iter_rows(min_col=3, min_row=11, max_col=15, max_row=11):
+                    for cell in row:
+                        if cell.value != '' or cell.value != None:
+                            cell.font = ExcelCustomStyler.child_bold_values_small_font
+                
+                #add styling to the region column titles
+                for row in worksheet.iter_rows(min_col=3, min_row=10, max_col=15, max_row=10):
+                    for cell in row:
+                        if cell.value != '' or cell.value != None:
+                            cell.font = ExcelCustomStyler.child_values_small_font              
 
             #apply the styling to the child worksheets 
             if ws != 'B' and ws != 'Content':
