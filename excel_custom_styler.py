@@ -387,10 +387,10 @@ class ExcelCustomStyler:
 
         #load the excel file with the data loaded to start applying styling
         #ExcelCustomStyler.load_excel_worksheet(ExcelCustomStyler.excel_file, ExcelCustomStyler.json_specification, ExcelCustomStyler.worksheets)
-        ExcelCustomStyler.apply_worksheet_style(ExcelCustomStyler.worksheets, ExcelCustomStyler.excel_file, ExcelCustomStyler.default_sheet_name, ExcelCustomStyler.json_specification)
+        ExcelCustomStyler.apply_content_worksheet_style(ExcelCustomStyler.worksheets, ExcelCustomStyler.excel_file, ExcelCustomStyler.default_sheet_name, ExcelCustomStyler.json_specification)
 
-    #apply the styling 
-    def apply_worksheet_style(worksheets, excel_file, default_sheet_name, json_specification):
+    #apply the styling for the content worksheet
+    def apply_content_worksheet_style(worksheets, excel_file, default_sheet_name, json_specification):
 
         #load the workbook
         excel_workbook = load_workbook(excel_file)
@@ -428,6 +428,12 @@ class ExcelCustomStyler:
         #Add content for child sheets
         excel_workbook.save(ExcelCustomStyler.excel_file)
 
+        #execute the function to apply the French questions for each child work sheet
+        ExcelCustomStyler.apply_french_questions_style(ExcelCustomStyler.worksheets, ExcelCustomStyler.excel_file, ExcelCustomStyler.default_sheet_name)
+
+    #apply the content and styling for the French questions on each child worksheet
+    def apply_french_questions_style(worksheets, excel_file, default_sheet_name):    
+
         #load the workbook
         excel_workbook = load_workbook(excel_file)
         worksheet = excel_workbook.active
@@ -458,9 +464,28 @@ class ExcelCustomStyler:
         #Add content for child sheets
         excel_workbook.save(ExcelCustomStyler.excel_file)   
 
+        #execute the function to apply the English questions for each child work sheet
+        ExcelCustomStyler.apply_english_questions_style(ExcelCustomStyler.worksheets, ExcelCustomStyler.excel_file, ExcelCustomStyler.default_sheet_name)
+
+    #apply the content and styling for the English questions on each child worksheet
+    def apply_english_questions_style(worksheets, excel_file, default_sheet_name):     
+
         #load the workbook
         excel_workbook = load_workbook(excel_file)
-        worksheet = excel_workbook.active                     
+        worksheet = excel_workbook.active
+
+        #create two lists designed to be used as the comparison statement
+        #for loading the worksheet questions in for their respective worksheets
+        cells_list = []
+        cells_questions_list = []
+        for row in worksheet.iter_rows(min_col=2, min_row=6, max_col=2):
+            for cell in row:
+                if cell.value != '' or cell.value != None:
+                    current_cell_string = cell.value
+                    new_cell_string = current_cell_string.split(".", 1)
+                    substring_cell_string = new_cell_string[0]   
+                    cells_list.append(substring_cell_string)
+                    cells_questions_list.append(current_cell_string)                     
         
         #loop and grab values to copy into the child sheets for the English questions
         for row in worksheet.iter_rows(min_col=3, min_row=6, max_col=3):
@@ -473,7 +498,14 @@ class ExcelCustomStyler:
                                 worksheet.cell(row=3, column=8).value = cell.value                        
   
         #Add content for child sheets
-        excel_workbook.save(ExcelCustomStyler.excel_file)  
+        excel_workbook.save(ExcelCustomStyler.excel_file) 
+
+        #execute the applying the hyperlinks to the content worksheets with styling
+        ExcelCustomStyler.apply_content_worksheet_hyperlinks(ExcelCustomStyler.worksheets, ExcelCustomStyler.excel_file, ExcelCustomStyler.default_sheet_name) 
+
+    #apply the hyperlinks and styling to the content worksheet, to navigate to the 
+    #child worksheets     
+    def apply_content_worksheet_hyperlinks(worksheets, excel_file, default_sheet_name):     
 
         #load the workbook
         excel_workbook = load_workbook(excel_file)
@@ -493,7 +525,20 @@ class ExcelCustomStyler:
                     if cell.value != '' or cell.value != None:
                         cell.font = ExcelCustomStyler.hyperlink_underline_style
                         if cell.value == ws:                       
-                            cell.hyperlink = hyperlink_location     
+                            cell.hyperlink = hyperlink_location
+
+        #add the hyperlink content
+        excel_workbook.save(ExcelCustomStyler.excel_file)                       
+
+        #execute the content worksheet default font styling
+        ExcelCustomStyler.apply_content_worksheet_default_font(ExcelCustomStyler.worksheets, ExcelCustomStyler.excel_file, ExcelCustomStyler.default_sheet_name)                    
+
+    #apply the default styling to the content worksheet font
+    def apply_content_worksheet_default_font(worksheets, excel_file, default_sheet_name): 
+
+        #load the workbook
+        excel_workbook = load_workbook(excel_file)
+        worksheet = excel_workbook.active                          
         
         #format the rest of the values in the content worksheet
         for row in worksheet.iter_rows(min_col=2, min_row=6, max_col=3):
@@ -502,7 +547,13 @@ class ExcelCustomStyler:
                     cell.font = ExcelCustomStyler.content_value_medium_font 
 
         #Add content for child sheets
-        excel_workbook.save(ExcelCustomStyler.excel_file)   
+        excel_workbook.save(ExcelCustomStyler.excel_file)  
+
+        #execute applying the child worksheet default project details
+        ExcelCustomStyler.apply_child_worksheet_project_details(ExcelCustomStyler.worksheets, ExcelCustomStyler.excel_file, ExcelCustomStyler.default_sheet_name) 
+
+    #apply the default child worksheet project details
+    def apply_child_worksheet_project_details(worksheets, excel_file, default_sheet_name):     
 
         #load the workbook
         excel_workbook = load_workbook(excel_file)
