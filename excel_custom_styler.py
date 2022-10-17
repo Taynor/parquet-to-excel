@@ -582,6 +582,8 @@ class ExcelCustomStyler:
                         worksheet[excel_config.child_sheet_labels[2]] = child_project_details['Fieldwork_Name']
                         worksheet[excel_config.child_sheet_labels[3]] = child_project_details['Total']
                         worksheet[excel_config.child_sheet_labels[19]] = child_project_details['Hyperlink_Value']
+                        worksheet[excel_config.child_sheet_base_custom_details[0]] = child_sheet_custom_base_detail['French_Base_Detail_Child_Sheet_1']
+                        worksheet[excel_config.child_sheet_base_custom_details[1]] = child_sheet_custom_base_detail['English_Base_Detail_Child_Sheet_1']
 
                         #set up the hyperlink for back to content sheet
                         worksheet[excel_config.child_sheet_labels[19]].font = ExcelCustomStyler.hyperlink_underline_style
@@ -590,6 +592,10 @@ class ExcelCustomStyler:
                         #format the layout
                         worksheet.merge_cells(excel_config.child_sheet_labels[4])    
                         worksheet.freeze_panes = excel_config.child_sheet_labels[5]   
+
+                        #format the chil sheet custom base labels
+                        worksheet.merge_cells(excel_config.child_sheet_base_custom_merge_cells[0])
+                        worksheet.merge_cells(excel_config.child_sheet_base_custom_merge_cells[1])
 
                         #add styling to child sheet labels
                         worksheet[excel_config.child_sheet_labels[0]].font = ExcelCustomStyler.child_title_small_font

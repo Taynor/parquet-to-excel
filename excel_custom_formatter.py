@@ -67,6 +67,12 @@ class ExcelCustomFormatter:
                 #format the width dimension of the total column
                 worksheet.column_dimensions[excel_config.child_sheet_labels[20]].width = 20.00
 
+                #add alignment formatting to the Total label in each child worksheet
+                for row in worksheet.iter_rows(min_col=2, min_row=10, max_col=2, max_row=10):
+                    for cell in row:
+                        if cell.value != '' or cell.value != None:
+                            cell.alignment = Alignment(wrapText=True, vertical='center', horizontal='left')
+
                 #add styling to the region column titles
                 for row in worksheet.iter_rows(min_col=3, min_row=9, max_col=15, max_row=9):
                     for cell in row:
@@ -89,9 +95,8 @@ class ExcelCustomFormatter:
                 #this is default as part of the Excel template
                 for row in worksheet.iter_rows(min_row=4, max_row=4):
                     for cell in row:
-                        worksheet.row_dimensions.height = 27.00  
+                        worksheet.row_dimensions[4].height = 27.00  
                                            
-
         #Add cell formatting for child sheets
         excel_workbook.save(ExcelCustomFormatter.excel_file) 
 
