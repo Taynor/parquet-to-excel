@@ -59,6 +59,10 @@ child_sheet_total_borders = ['C10', 'D10', 'E10', 'F10', 'G10', 'H10', 'I10', 'J
 'M10', 'N10', 'O10', 'C11', 'D11', 'E11', 'F11', 'G11', 'H11', 'I11', 'J11', 'K11', 'L11',
 'M11', 'N11', 'O11']
 
+#merge cells for the questions content loaded into each worksheet. This will customise
+#the alignment for the dynamic content. The first is for French and the second for English
+child_sheet_question_content = ['B3:F3', 'H3:L3']
+
 #the parquet location for the content sheet data adapter parquet file
 content_sheet_parquet = 'C:\python-excel-template-git\python-excel-template\parquets\content_sheet\content_sheet.snappy.parquet'
 base_sheet_parquet = 'C:\python-excel-template-git\python-excel-template\parquets\sheet_base\sheet_base.snappy.parquet'

@@ -5,4 +5,4 @@
 cell_location_column = [0, 2]
 
 #cell row for the starting points of where to load the data
-cell_location_row = [4, 9]
+cell_location_row = [4, 8]
