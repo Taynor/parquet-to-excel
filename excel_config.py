@@ -55,7 +55,7 @@ base_sheet_labels = ['B12', 'B13', 'B14', 'B15', 'B16', 'B17', 'B18', 'B19', 'B2
 base_sheet_borders = ['B12:B95']
 
 #the cell range for the base child label and detail for the merge of cells
-child_sheet_base_custom_merge_cells = ['B5:F5', 'H5:L5']
+child_sheet_base_custom_merge_cells = ['B5:F5', 'H5:L5', 'B4:F4', 'H4:L4']
 
 #the cell range for adding borders around the Total values in the child sheets
 child_sheet_total_borders = ['C10', 'D10', 'E10', 'F10', 'G10', 'H10', 'I10', 'J10', 'K10', 'L10',

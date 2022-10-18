@@ -582,8 +582,6 @@ class ExcelCustomStyler:
                         worksheet[excel_config.child_sheet_labels[2]] = child_project_details['Fieldwork_Name']
                         worksheet[excel_config.child_sheet_labels[3]] = child_project_details['Total']
                         worksheet[excel_config.child_sheet_labels[19]] = child_project_details['Hyperlink_Value']
-                        worksheet[excel_config.child_sheet_base_custom_details[0]] = child_sheet_custom_base_detail['French_Base_Detail_Child_Sheet_1']
-                        worksheet[excel_config.child_sheet_base_custom_details[1]] = child_sheet_custom_base_detail['English_Base_Detail_Child_Sheet_1']
 
                         #set up the hyperlink for back to content sheet
                         worksheet[excel_config.child_sheet_labels[19]].font = ExcelCustomStyler.hyperlink_underline_style
@@ -593,9 +591,11 @@ class ExcelCustomStyler:
                         worksheet.merge_cells(excel_config.child_sheet_labels[4])    
                         worksheet.freeze_panes = excel_config.child_sheet_labels[5]   
 
-                        #format the chil sheet custom base labels
+                        #format the child sheet custom base labels
                         worksheet.merge_cells(excel_config.child_sheet_base_custom_merge_cells[0])
                         worksheet.merge_cells(excel_config.child_sheet_base_custom_merge_cells[1])
+                        worksheet.merge_cells(excel_config.child_sheet_base_custom_merge_cells[2])
+                        worksheet.merge_cells(excel_config.child_sheet_base_custom_merge_cells[3])
 
                         #add styling to child sheet labels
                         worksheet[excel_config.child_sheet_labels[0]].font = ExcelCustomStyler.child_title_small_font
@@ -639,6 +639,25 @@ class ExcelCustomStyler:
                         worksheet[excel_config.child_sheet_regions[24]].border = ExcelCustomStyler.thin_borders_top_bottom_style
                         worksheet[excel_config.child_sheet_regions[25]].border = ExcelCustomStyler.thin_borders_top_bottom_style
                         worksheet[excel_config.child_sheet_regions[26]].border = ExcelCustomStyler.thin_borders_top_bottom_right_style  
+                    
+                    #this loop is for adding the custom base details for each child worksheet
+                    for child_sheet_custom_base_detail in spec_config['child_sheet_custom_base_detail']:
+                        
+                        #add the base details onto each child worksheet
+                        worksheet[excel_config.child_sheet_base_custom_details[0]] = child_sheet_custom_base_detail['French_Base_Detail_Child_Sheet_1']
+                        worksheet[excel_config.child_sheet_base_custom_details[1]] = child_sheet_custom_base_detail['English_Base_Detail_Child_Sheet_1']
+
+                    #add styling to the child worksheets custom base detail - French
+                    for row in worksheet.iter_rows(min_col=2, min_row=5, max_col=6, max_row=5):
+                        for cell in row:
+                            if cell.value != '' or cell.value != None:
+                                cell.font = ExcelCustomStyler.child_title_small_font
+
+                    #add styling to the child worksheets custom base detail - English
+                    for row in worksheet.iter_rows(min_col=8, min_row=5, max_col=12, max_row=5):
+                        for cell in row:
+                            if cell.value != '' or cell.value != None:
+                                cell.font = ExcelCustomStyler.child_title_small_font            
 
                     #add styling to the totals column values
                     for row in worksheet.iter_rows(min_col=3, min_row=10, max_col=15, max_row=10):
