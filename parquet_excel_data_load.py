@@ -188,10 +188,12 @@ class ParquetExcelDataLoad:
     def read_parquet_loader(parquet_load_file):
         
         #read the content of the parquet loading file
-        ParquetExcelDataLoad.default_load_sheet = pd.read_parquet(parquet_load_file, engine='fastparquet')
+        ParquetExcelDataLoad.default_load_sheet = pd.read_parquet(parquet_load_file, 
+                                                                  engine='fastparquet')
 
         #set the filter column read in from the parquet
-        ParquetExcelDataLoad.set_filter_parquet(ParquetExcelDataLoad.parquet_filter, ParquetExcelDataLoad.default_load_sheet)
+        ParquetExcelDataLoad.set_filter_parquet(ParquetExcelDataLoad.parquet_filter, 
+                                                ParquetExcelDataLoad.default_load_sheet)
 
     #sets the filter and loads values of the worksheets that will have its data loaded into
     def set_filter_parquet(parquet_filter, parquet_data):
@@ -209,7 +211,12 @@ class ParquetExcelDataLoad:
         #pass the parameters to class variables for reuse   
         ParquetExcelDataLoad.worksheets = worksheets 
 
-        ParquetExcelDataLoad.load_parquet_content(ParquetExcelDataLoad.excel_file, ParquetExcelDataLoad.parquet_header, ParquetExcelDataLoad.parquet_list, ParquetExcelDataLoad.worksheets, ParquetExcelDataLoad.default_sheet_name, ParquetExcelDataLoad.custom_data_load)
+        ParquetExcelDataLoad.load_parquet_content(ParquetExcelDataLoad.excel_file, 
+                                                  ParquetExcelDataLoad.parquet_header, 
+                                                  ParquetExcelDataLoad.parquet_list, 
+                                                  ParquetExcelDataLoad.worksheets, 
+                                                  ParquetExcelDataLoad.default_sheet_name, 
+                                                  ParquetExcelDataLoad.custom_data_load)
 
     #loads the data from the parquet filter and parquet loader file into the respective
     #worksheets using the arguments from the upstream functions
@@ -230,7 +237,11 @@ class ParquetExcelDataLoad:
         elif default_sheet_name == excel_workbook.active.title:
             
             #set up the excel writer and replace the sheet content in append mode to add the data
-            excel_writer = pd.ExcelWriter(excel_file, mode="a", engine="openpyxl", if_sheet_exists="replace")
+            excel_writer = pd.ExcelWriter(excel_file, 
+                                          mode="a", 
+                                          engine="openpyxl", 
+                                          if_sheet_exists="replace")
+
             default_sheet_parquet_load = pd.read_parquet(ParquetExcelDataLoad.parquet_load_file)
             
             #load data at default location in excel
@@ -238,22 +249,38 @@ class ParquetExcelDataLoad:
 
                 #load with header row from parquet
                 if parquet_header == True:
-                    default_sheet_parquet_load.to_excel(excel_writer, sheet_name=default_sheet_name, header=True, index=False)
+                    default_sheet_parquet_load.to_excel(excel_writer, 
+                                                        sheet_name=default_sheet_name, 
+                                                        header=True, 
+                                                        index=False)
 
                 #load without header row from parquet
                 elif parquet_header == False:
-                    default_sheet_parquet_load.to_excel(excel_writer, sheet_name=default_sheet_name, header=None, index=False)
+                    default_sheet_parquet_load.to_excel(excel_writer, 
+                                                        sheet_name=default_sheet_name, 
+                                                        header=None, 
+                                                        index=False)
             
             #load data at custom position in excel
             elif custom_data_load != '':
 
                 #load with header row from parquet
                 if parquet_header == True:
-                    default_sheet_parquet_load.to_excel(excel_writer, sheet_name=default_sheet_name, header=True, index=False, startcol=data_load_config.cell_location_column[0], startrow=data_load_config.cell_location_row[0])
+                    default_sheet_parquet_load.to_excel(excel_writer, 
+                                                        sheet_name=default_sheet_name, 
+                                                        header=True, 
+                                                        index=False, 
+                                                        startcol=data_load_config.cell_location_column[0], 
+                                                        startrow=data_load_config.cell_location_row[0])
 
                 #load without header row from parquet
                 elif parquet_header == False:
-                    default_sheet_parquet_load.to_excel(excel_writer, sheet_name=default_sheet_name, header=None, index=False, startcol=data_load_config.cell_location_column[0], startrow=data_load_config.cell_location_row[0])
+                    default_sheet_parquet_load.to_excel(excel_writer, 
+                                                        sheet_name=default_sheet_name, 
+                                                        header=None, 
+                                                        index=False, 
+                                                        startcol=data_load_config.cell_location_column[0], 
+                                                        startrow=data_load_config.cell_location_row[0])
 
             #save the content to the Excel workbook file
             excel_writer.save()
@@ -264,7 +291,10 @@ class ParquetExcelDataLoad:
         excel_workbook = load_workbook(excel_file)    
 
         #set up the excel writer and replace the sheet content in append mode to add the data
-        excel_writer = pd.ExcelWriter(excel_file, mode="a", engine="openpyxl", if_sheet_exists="replace")
+        excel_writer = pd.ExcelWriter(excel_file, 
+                                      mode="a", 
+                                      engine="openpyxl", 
+                                      if_sheet_exists="replace")
 
         #list the parquet files and match with the worksheet names to load the content 
         #on the matching parquet leaf sub directory and worksheet name
@@ -276,29 +306,46 @@ class ParquetExcelDataLoad:
             #to load the parquet content into that respective worksheet
             for worksheet in worksheets:
                 if path_name == worksheet:
-                    parquet_content = pd.read_parquet(pl, engine='fastparquet')
+                    parquet_content = pd.read_parquet(pl, 
+                                                      engine='fastparquet')
 
                     #load data at default location in excel
                     if custom_data_load == '':
 
                         #load with header row from parquet
                         if parquet_header == True:
-                            parquet_content.to_excel(excel_writer, sheet_name=worksheet, header=True, index=False)
+                            parquet_content.to_excel(excel_writer, 
+                                                     sheet_name=worksheet, 
+                                                     header=True, 
+                                                     index=False)
 
                         #load without header row from parquet
                         elif parquet_header == False:
-                            parquet_content.to_excel(excel_writer, sheet_name=worksheet, header=None, index=False)
+                            parquet_content.to_excel(excel_writer, 
+                                                     sheet_name=worksheet, 
+                                                     header=None, 
+                                                     index=False)
 
                     #load data at custom position in excel
                     elif custom_data_load != '':
 
                         #load with header row from parquet
                         if parquet_header == True:
-                            parquet_content.to_excel(excel_writer, sheet_name=worksheet, header=True, index=False, startcol=data_load_config.cell_location_column[1], startrow=data_load_config.cell_location_row[1])
+                            parquet_content.to_excel(excel_writer, 
+                                                     sheet_name=worksheet, 
+                                                     header=True, 
+                                                     index=False, 
+                                                     startcol=data_load_config.cell_location_column[1], 
+                                                     startrow=data_load_config.cell_location_row[1])
 
                         #load without header row from parquet
                         elif parquet_header == False:    
-                            parquet_content.to_excel(excel_writer, sheet_name=worksheet, header=None, index=False, startcol=data_load_config.cell_location_column[1], startrow=data_load_config.cell_location_row[1])
+                            parquet_content.to_excel(excel_writer, 
+                                                     sheet_name=worksheet, 
+                                                     header=None, 
+                                                     index=False, 
+                                                     startcol=data_load_config.cell_location_column[1], 
+                                                     startrow=data_load_config.cell_location_row[1])
 
         #save the content to the Excel workbook file
         excel_writer.save()

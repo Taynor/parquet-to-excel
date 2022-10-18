@@ -68,32 +68,51 @@ class ExcelCustomFormatter:
                 worksheet.column_dimensions[excel_config.child_sheet_labels[20]].width = 20.00
 
                 #add alignment formatting to the Total label in each child worksheet
-                for row in worksheet.iter_rows(min_col=2, min_row=10, max_col=2, max_row=10):
+                for row in worksheet.iter_rows(min_col=2, 
+                                               min_row=10, 
+                                               max_col=2, 
+                                               max_row=10):
                     for cell in row:
                         if cell.value != '' or cell.value != None:
-                            cell.alignment = Alignment(wrapText=True, vertical='center', horizontal='left')
+                            cell.alignment = Alignment(wrapText=True, 
+                                                       vertical='center', 
+                                                       horizontal='left')
 
                 #add styling to the region column titles
-                for row in worksheet.iter_rows(min_col=3, min_row=9, max_col=15, max_row=9):
+                for row in worksheet.iter_rows(min_col=3, 
+                                               min_row=9, 
+                                               max_col=15, 
+                                               max_row=9):
                     for cell in row:
                         if cell.value != '' or cell.value != None:
-                            cell.alignment = Alignment(wrapText=True, vertical='center', horizontal='center')
+                            cell.alignment = Alignment(wrapText=True, 
+                                                       vertical='center', 
+                                                       horizontal='center')
 
                 #cell alignment for French question on each child worksheet
-                for row in worksheet.iter_rows(min_col=2, min_row=3, max_col=6, max_row=3):
+                for row in worksheet.iter_rows(min_col=2, 
+                                               min_row=3, 
+                                               max_col=6, 
+                                               max_row=3):
                     for cell in row:
                         if cell.value != '' or cell.value != None:
-                            cell.alignment = Alignment(wrapText=True, vertical='bottom') 
+                            cell.alignment = Alignment(wrapText=True, 
+                                                       vertical='bottom') 
 
                 #cell alignment for English question on each child worksheet
-                for row in worksheet.iter_rows(min_col=8, min_row=3, max_col=12, max_row=3):
+                for row in worksheet.iter_rows(min_col=8, 
+                                               min_row=3, 
+                                               max_col=12, 
+                                               max_row=3):
                     for cell in row:
                         if cell.value != '' or cell.value != None:
-                            cell.alignment = Alignment(wrapText=True, vertical='bottom')  
+                            cell.alignment = Alignment(wrapText=True, 
+                                                       vertical='bottom')  
 
                 #custom formatting for of cell row height for row 4 of each child worksheet
                 #this is default as part of the Excel template
-                for row in worksheet.iter_rows(min_row=4, max_row=4):
+                for row in worksheet.iter_rows(min_row=4, 
+                                               max_row=4):
                     for cell in row:
                         worksheet.row_dimensions[4].height = 27.00  
                                            
@@ -123,15 +142,22 @@ class ExcelCustomFormatter:
                 worksheet.column_dimensions[excel_config.content_sheet_labels_dimensions[1]].width = 100.00
                 worksheet.column_dimensions[excel_config.content_sheet_labels_dimensions[2]].width = 100.00
 
-                for row in worksheet.iter_rows(min_col=1, max_col=3, min_row=5, max_row=5):
+                for row in worksheet.iter_rows(min_col=1, 
+                                               max_col=3, 
+                                               min_row=5, 
+                                               max_row=5):
                     for cell in row:
                         if cell.value != '' or cell.value != None:
                             cell.alignment = Alignment(horizontal='left')
 
-                for row in worksheet.iter_rows(min_col=2, max_col=3, min_row=6):
+                for row in worksheet.iter_rows(min_col=2, 
+                                               max_col=3, 
+                                               min_row=6):
                     for cell in row:
                         if cell.value != '' or cell.value != None:
-                            cell.alignment = Alignment(wrapText=True, vertical='bottom', horizontal='left')            
+                            cell.alignment = Alignment(wrapText=True, 
+                                                       vertical='bottom', 
+                                                       horizontal='left')            
 
         #Add cell formatting for child sheets
         excel_workbook.save(excel_file)

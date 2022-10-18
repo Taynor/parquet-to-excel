@@ -99,7 +99,8 @@ class ParquetWorksheet:
         parquet_data = pd.read_parquet(parquet_file, engine='fastparquet')
 
         #call the set_filter_parquet method to set the filter column value
-        ParquetWorksheet.set_filter_parquet(parquet_filter, parquet_data)
+        ParquetWorksheet.set_filter_parquet(parquet_filter, 
+                                            parquet_data)
 
     #filter the parquet data - PRIVATE
     def set_filter_parquet(parquet_filter, parquet_data):
@@ -127,7 +128,8 @@ class ParquetWorksheet:
             worksheets.append(column_filter)
 
         #call the __create_worksheets to create the worksheets built from the worksheets list    
-        ParquetWorksheet.create_worksheets(ParquetWorksheet.default_sheet_name, worksheets)
+        ParquetWorksheet.create_worksheets(ParquetWorksheet.default_sheet_name, 
+                                           worksheets)
 
     #create the worksheets from the parquet filtered column - PRIVATE
     def create_worksheets(default_sheet_name, worksheets = []):
