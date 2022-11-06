@@ -1,0 +1,275 @@
+{
+    "worksheet_names": [
+        {
+            "frontSheet": "Content",
+            "firstSheet": "B", 
+            "secondSheet": "QB1", 
+            "thirdSheet": "QB1R", 
+            "fourthSheet": "QB2",
+            "fifthSheet": "QB2R",
+            "sixthSheet": "QB3",
+            "seventhSheet": "QB3R",
+            "eigthSheet": "QB4",
+            "ninethSheet": "QB5"
+        }
+    ],
+    "region_names": [
+        {
+            "region1": "UE6 EU6", 
+            "region2": "UE9 EU9", 
+            "region3": "UE10 EU10", 
+            "region4": "UE12 EU12",
+            "region5": "FI/AT/SE",
+            "region6": "UE15 EU15",
+            "region7": "EURO ZONE",
+            "region8": "NON EURO",
+            "region9": "NEM10 NMS10",
+            "region10": "NEM13 NMS13",
+            "region11": "UE25 EU25",
+            "region12": "UE27-HR EU27-HR",
+            "region13": "UE27 EU27"
+        }
+    ],
+    "hyperlink_location": [
+        {
+            "sheet1Hyperlink": "#B!A1",
+            "sheet2Hyperlink": "#QB1!A1",
+            "sheet3Hyperlink": "#QBR1!A1",
+            "sheet4Hyperlink": "#QB2!A1",
+            "sheet5Hyperlink": "#QBR2!A1",
+            "sheet6Hyperlink": "#QB3!A1",
+            "sheet7Hyperlink": "#QBR3!A1",
+            "sheet8Hyperlink": "#QB4!A1",
+            "sheet9Hyperlink": "#QB5!A1"
+        }
+    ],
+    "content_project_details": [
+        {
+            "Project_Label": "Project: ",
+            "Project_Name": "Eurobarometer",
+            "Wave_Label": "Wave: ",
+            "Wave_Name": "97.3",
+            "Fieldwork_Label": "Fieldwork: ",
+            "Fieldwork_Name": "19/04 - 16/05/2022",
+            "Child_Sheet_Label": "Sheet",
+            "Question_French_Label": "Question French",
+            "Question_English_Label": "Question English"
+        }
+    ],
+    "base_respondents_labels": [
+        {
+            "Country_AL": "AL",
+            "Country_AT": "AT",
+            "Country_BE": "BE",
+            "Country_BG": "BG",
+            "Country_BA": "BA",
+            "Country_CH": "CH",
+            "Country_CY": "CY",
+            "Country_CY(TCC)": "CY(TCC)",
+            "Country_CZ": "CZ",
+            "Country_DE": "DE",
+            "Country_DK": "DK",
+            "Country_EE": "EE",
+            "Country_EL(GR)": "EL(GR)",
+            "Country_ES": "ES",
+            "Country_FI": "FI",
+            "Country_FR": "FR",
+            "Country_HR": "HR",
+            "Country_HU": "HU",
+            "Country_IE": "IE",
+            "Country_IS": "IS",
+            "Country_IT": "IT",
+            "Country_KV": "KV",
+            "Country_LT": "LT",
+            "Country_LU": "LU",
+            "Country_LV": "LV",
+            "Country_ME": "ME",
+            "Country_MK": "MK",
+            "Country_MT": "MT",
+            "Country_NL": "NL",
+            "Country_NO": "NO",
+            "Country_PL": "PL",
+            "Country_PT": "PT",
+            "Country_RO": "RO",
+            "Country_RS": "RS",
+            "Country_SE": "SE",
+            "Country_SI": "SI",
+            "Country_SK": "SK",
+            "Country_TR": "TR",
+            "Country_UK": "UK",
+            "Country_US": "US",
+            "Country_WG": "WG",
+            "Country_EG": "EG"
+        }
+    ],
+    "child_project_details": [
+        {
+            "Project_Name": "Eurobarometer - 97.3",
+            "Wave_Name": "VOL AA weighted",
+            "Fieldwork_Name": "Terrain/Fieldwork :  19/04 - 16/05/2022",
+            "Total": "Total",
+            "Hyperlink_Value": "<<Back to content",
+            "Content_Sheet_Hyperlink": "#Content!A1"
+        }
+    ],
+    "child_sheet_custom_base_detail": [
+        {
+            "French_Base_Detail_Child_Sheet_1": "Base: Ensemble",
+            "English_Base_Detail_Child_Sheet_1": "Base: All Respondents",
+            "French_Base_Detail_Child_Sheet_2": "Base: SI 'PRATIQUE UN SPORT OU UNE ACTIVITÉ PHYSIQUE', CODE 1 A 5 EN QB1 OU QB2",
+            "English_Base_Detail_Child_Sheet_2": "Base: IF 'PRACTICES A SPORT OR A PHYSICAL ACTIVITY', CODE 1 TO 5 IN QB1 OR QB2"
+        }
+    ],
+    "base_sheet_category_labels": [
+        {
+            "French_Category_Label": "B. Pays de terrain",
+            "English_Category_Label": "B. Fieldwork country"
+        }
+    ],
+    "child_sheet_1_answers": [
+        {
+            "French_Answer_1": "5 fois par semaine ou plus",
+            "English_Answer_1": "5 times a week or more",
+            "French_Answer_2": "3 à 4 fois par semaine",
+            "English_Answer_2": "3 to 4 times a week",
+            "French_Answer_3": "1 à 2 fois par semaine",
+            "English_Answer_3": "1 to 2 times a week",
+            "French_Answer_4": "1 à 3 fois par mois",
+            "English_Answer_4": "1 to 3 times a month",
+            "French_Answer_5": "Moins souvent",
+            "English_Answer_5": "Less often",
+            "French_Answer_6": "Jamais",
+            "English_Answer_6": "Never",
+            "French_Answer_7": "Ne sait pas",
+            "English_Answer_7": "Don't know"
+        }
+    ],
+    "child_sheet_2_answers": [
+        {
+            "French_Answer_1": "Presque quotidienne",
+            "English_Answer_1": "Regularly",
+            "French_Answer_2": "Plusieurs fois par semaine",
+            "English_Answer_2": "With some regularity",
+            "French_Answer_3": "Occasionnellement",
+            "English_Answer_3": "Seldom",
+            "French_Answer_4": "Jamais",
+            "English_Answer_4": "Never",
+            "French_Answer_5": "Ne sait pas",
+            "English_Answer_5": "Don't know"
+        }
+    ],
+    "child_sheet_3_answers": [
+        {
+            "French_Answer_1": "5 fois par semaine ou plus",
+            "English_Answer_1": "5 times a week or more",
+            "French_Answer_2": "3 ou 4 fois par semaine",
+            "English_Answer_2": "3 to 4 times a week",
+            "French_Answer_3": "1 à 2 fois par semaine",
+            "English_Answer_3": "1 to 2 times a week",
+            "French_Answer_4": "1 à 3 fois par mois",
+            "English_Answer_4": "1 to 3 times a month",
+            "French_Answer_5": "Moins souvent",
+            "English_Answer_5": "Less often",
+            "French_Answer_6": "Jamais",
+            "English_Answer_6": "Never",
+            "French_Answer_7": "Ne sait pas",
+            "English_Answer_7": "Don't know"
+        }
+    ],
+    "child_sheet_4_answers": [
+        {
+            "French_Answer_1": "Presque quotidienne",
+            "English_Answer_1": "Regularly",
+            "French_Answer_2": "Plusieurs fois par semaine",
+            "English_Answer_2": "With some regularity",
+            "French_Answer_3": "Occasionnellement",
+            "English_Answer_3": "Seldom",
+            "French_Answer_4": "Jamais",
+            "English_Answer_4": "Never",
+            "French_Answer_5": "Ne sait pas",
+            "English_Answer_5": "Don't know"
+        }
+    ],
+    "child_sheet_5_answers": [
+        {
+            "French_Answer_1": "1 jour",
+            "English_Answer_1": "1 day",
+            "French_Answer_2": "2 jours",
+            "English_Answer_2": "2 days",
+            "French_Answer_3": "3 jours",
+            "English_Answer_3": "3 days",
+            "French_Answer_4": "4 jours",
+            "English_Answer_4": "4 days",
+            "French_Answer_5": "5 jours",
+            "English_Answer_5": "5 days",
+            "French_Answer_6": "6 jours",
+            "English_Answer_6": "6 days",
+            "French_Answer_7": "7 jours",
+            "English_Answer_7": "7 days",
+            "French_Answer_8": "Aucun",
+            "English_Answer_8": "None",
+            "French_Answer_9": "Ne sait pas",
+            "English_Answer_9": "Don't know"
+        }
+    ],
+    "child_sheet_6_answers": [
+        {
+            "French_Answer_1": "1-3 jours",
+            "English_Answer_1": "1-3 days",
+            "French_Answer_2": "4-7 jours",
+            "English_Answer_2": "4-7 days",
+            "French_Answer_3": "Jamais",
+            "English_Answer_3": "Never",
+            "French_Answer_4": "Ne sait pas",
+            "English_Answer_4": "Don't know"
+        }
+    ],
+    "child_sheet_7_answers": [
+        {
+            "French_Answer_1": "30 minutes ou moins",
+            "English_Answer_1": "30 minutes or less",
+            "French_Answer_2": "31 à 60 minutes",
+            "English_Answer_2": "31 to 60 minutes",
+            "French_Answer_3": "61 à 90 minutes",
+            "English_Answer_3": "61 to 90 minutes",
+            "French_Answer_4": "91 à 120 minutes",
+            "English_Answer_4": "91 to 120 minutes",
+            "French_Answer_5": "Plus de 120 minutes",
+            "English_Answer_5": "More than 120 minutes",
+            "French_Answer_6": "Ne fait jamais aucun effort physique intense",
+            "English_Answer_6": "Never do any vigorous physical activity",
+            "French_Answer_7": "Ne sait pas",
+            "English_Answer_7": "Don't know",
+            "French_Answer_8": "Jamais",
+            "English_Answer_8": "Never",
+            "French_Answer_9": "30min ou moins",
+            "English_Answer_9": "30min or less",
+            "French_Answer_10": "31min à 90min",
+            "English_Answer_10": "31min to 90min",
+            "French_Answer_11": "91min ou plus",
+            "English_Answer_11": "91min or more"
+        }
+    ],
+    "child_sheet_8_answers": [
+        {
+            "French_Answer_1": "1 jour",
+            "English_Answer_1": "1 day",
+            "French_Answer_2": "2 jours",
+            "English_Answer_2": "2 days",
+            "French_Answer_3": "3 jours",
+            "English_Answer_3": "3 days",
+            "French_Answer_4": "4 jours",
+            "English_Answer_4": "4 days",
+            "French_Answer_5": "5 jours",
+            "English_Answer_5": "5 days",
+            "French_Answer_6": "6 jours",
+            "English_Answer_6": "6 days",
+            "French_Answer_7": "7 jours",
+            "English_Answer_7": "7 days",
+            "French_Answer_8": "Aucun",
+            "English_Answer_8": "None",
+            "French_Answer_9": "Ne sait pas",
+            "English_Answer_9": "Don't know"
+        }
+    ]
+}

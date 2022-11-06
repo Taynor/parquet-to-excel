@@ -1,0 +1,3 @@
+docker build . -f dockerfile -t parquet-to-excel:0.0.1
+
+docker run --tty --volume ${pwd}:/parquet-to-excel -d parquet-to-excel:0.0.1

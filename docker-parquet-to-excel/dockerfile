@@ -1,0 +1,19 @@
+#Pull latest Ubuntu image
+FROM ubuntu:latest
+
+ENV DEBIAN_FRONTEND noninteractive
+
+#Install python3 and pip3 and packages
+RUN apt upgrade
+RUN apt update
+RUN apt install -y python3
+RUN apt install -y python3-pip
+RUN pip3 install pandas
+RUN pip3 install openpyxl
+RUN pip3 install fastparquet
+
+#Copy the files to the working directory for the image
+COPY . .
+
+#execute python script
+ENTRYPOINT ["python3", "/parquet-to-excel/parquet-to-excel/code/create_template.py"]

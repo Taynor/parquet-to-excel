@@ -1,0 +1,1 @@
+excel_custom_styler.ExcelCustomStyler.style_worksheets('/excel_template.xlsx', '/parquets/content/content_sheet.snappy.parquet', '/excel_specification.json', '/excel_styles.json', 'Content')

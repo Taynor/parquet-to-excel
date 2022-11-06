@@ -1,0 +1,1 @@
+parquet_excel_data_load.ParquetExcelDataLoad.load_parquet_data('parquets/content/content_sheet.snappy.parquet', '/excel_template.xlsx', '/parquets/', 'Question', True, 'Content', '/data_load_config.py')
